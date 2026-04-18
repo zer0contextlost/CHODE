@@ -623,9 +623,13 @@ Flat Python script repositories without conventional package structure produce s
 
 ### 14.4 Scoring Strictness
 
-Substring matching without normalisation means a model that produces a semantically correct but differently formatted answer (e.g., `-u -u -u` when the profile says `-uuu`) scores zero. This is intentional as a fidelity probe but may undercount correct answers in human evaluation contexts.
+Substring matching without normalisation means a model that produces a semantically correct but differently formatted answer (e.g., `-u -u -u` when the profile says `-uuu`) scores zero. This is intentional as a fidelity probe but may undercount correct answers in human evaluation contexts. Future work should introduce a parallel semantic equivalence score to distinguish exact profile reproduction from factual correctness.
 
-### 14.5 Context Length Scaling
+### 14.5 Efficiency Metric Framing
+
+The 122× and 454× comprehension-per-token figures compare CHODE input tokens to self-profiling input tokens. The denominator includes tokens the model likely did not attend to due to attention dilution. The true efficiency gain over *effective* attended tokens is lower than these figures suggest. The metrics are valid as input-cost comparisons but should not be read as claims about attention or retrieval efficiency.
+
+### 14.6 Context Length Scaling
 
 Next.js (27,000 files) required ~567 token profiles but raw self-profiling exceeds most model context limits (300,000+ tokens). We did not evaluate self-profiling for very large repos; performance would be expected to degrade further due to context limits and increased attention dilution.
 
@@ -674,6 +678,28 @@ CHODE is not a compression tool in the traditional sense — it does not summari
 The internet-scale training corpora that underpin current frontier models are overwhelmingly narrative. Models trained on them learn to approximate the shape of knowledge without reliably retaining specific facts. The inference-time failure of self-profiling is a symptom of this: the model learned what repository documentation looks like, not what repositories contain.
 
 A training corpus built on structured extraction — not just for code, but for any domain where specific facts matter more than narrative flow — may produce models with qualitatively different retrieval behavior. This paper provides the proof of concept at inference scale. Empirical validation at training scale remains future work.
+
+### 16.4 Planned Benchmark Extensions
+
+Six experiments are planned in direct response to peer review findings:
+
+**1. Semantic equivalence scoring**
+Implement a parallel scoring pass that accepts semantically equivalent answers (e.g., `-u -u -u` = `-uuu`, `typescript` = `ts`). Run against all existing results to quantify the gap between strict profile-fidelity scoring and semantic correctness. This addresses the documented scoring strictness concern and provides a more honest upper bound on model comprehension.
+
+**2. Unconventional repository benchmark**
+Add 5 non-conventional repos to the primary benchmark: a monorepo (Turborepo), a repo with no README, a repo with custom build scripts, an embedded systems repo, and a pure configuration repo. These stress-test CHODE's generator and reveal where structural assumptions break down.
+
+**3. Profile staleness experiment**
+Synthetic drift test: generate a profile, then add a new dependency, route, and auth method to a test repo without regenerating. Measure accuracy degradation as a function of commit distance from profile generation. Quantify the "freshness half-life" of a CHODE profile.
+
+**4. Position sensitivity test**
+Evaluate whether placing the CHODE profile at the end of context (where attention is strongest per Liu et al.) improves scores. Test at beginning, middle, and end positions across 3 repos × 3 models. Determine whether the profile format is robust to position or requires placement guidance.
+
+**5. Multi-repo context test**
+Concatenate 2–3 CHODE profiles in a single context window and evaluate whether models can correctly attribute facts to the right repo. Tests interference effects between profiles — critical for monorepo and microservices use cases.
+
+**6. Independent question authorship**
+Have three independent authors unfamiliar with the benchmark write stump questions for 3 repos. Compare scores on author-generated vs. independent questions to quantify authorship bias. A significant gap would indicate the current question set is inadvertently tuned to CHODE's output format.
 
 ---
 
