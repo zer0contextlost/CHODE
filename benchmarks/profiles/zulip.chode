@@ -2,7 +2,7 @@
 
 ---DNA---
 @STACK python
-@FRONTEND ts preact astro webpack vite (web/src/)
+@FRONTEND typescript preact astro webpack vite (web/src/)
 @CI github-actions
 @PKG pnpm uv
 @TEST puppeteer
@@ -20,3 +20,4 @@
 @SETUP Contributing code. Check out our guide for new contributors to get started. We have invested in making Zulip’s code highly readable, thoughtfully tested, and easy to modify. Beyond that, we have…
 @TESTING Zulip server takes pride in its ~98% test coverage. All server changes must include nice tests that follow our testing philosophy. ### Before Submitting: ```bash ./tools/test-js-with-node #…
 @GOTCHAS ### Treating Known Issues as Acceptable common failure mode is discovering problem during verification and then noting it as known limitation than fixing it. At Zulip, there is no category of…
+

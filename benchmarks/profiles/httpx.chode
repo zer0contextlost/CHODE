@@ -1,0 +1,17 @@
+---CHODE v2 @ b5addb6---
+
+---DNA---
+@STACK python
+@CI github-actions
+@PKG pip
+@TEST pytest
+@CONFIG toml
+@PACKAGES httpx/(23)
+@STRUCT httpx/(24) scripts/(8)
+
+---CONTEXT---
+@PURPOSE HTTPX - next-generation HTTP client for Python. HTTPX is fully featured HTTP client library for Python 3. It includes integrated command line client, has support for both HTTP/1.1…
+@SETUP Install with pip: ```shell $ pip install httpx ``` Or, to include optional HTTP/2 support, use: ```shell $ pip install httpx[http2] ``` HTTPX requires Python 3.9+.
+@ENV When using `Client` instance, ssl configurations should always be passed on client instantiation, than passed to request method. If you need more than one different SSL configuration, you should use…
+@TESTING We use custom shell scripts to automate testing, linting, and documentation building workflow. To run tests, use: ```shell $ scripts/test ``` !!! warning test suite spawns testing servers on…
+

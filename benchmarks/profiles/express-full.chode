@@ -1,0 +1,16 @@
+---CHODE v2 @ 8e022ed---
+
+---DNA---
+@STACK express javascript mocha supertest
+@CI github-actions
+@PKG npm
+@TEST mocha
+@ENTRY index.js
+@PACKAGES lib/(6)
+@STRUCT examples/(80) lib/(6)
+
+---CONTEXT---
+@PURPOSE Fast, unopinionated, minimalist web framework for Node.js. This project has [Code of Conduct].
+@CONVENTIONS Express philosophy is to provide small, robust tooling for HTTP servers, making it great solution for single page applications, websites, hybrids, or public HTTP APIs. Express does not force you…
+@SETUP This is Node.js module available through npm registry. Before installing, download and install Node.js. Node.js 18 or higher is required. If this is brand new project, make sure to create…
+

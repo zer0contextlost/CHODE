@@ -1,0 +1,13 @@
+---CHODE v2 @ b76cb62---
+
+---DNA---
+@STACK kotlin ktor
+@CI github-actions
+@AUTH jwt ldap
+@PACKAGES ktor-server/(782) ktor-client/(612) ktor-utils/(172) ktor-shared/(164) ktor-network/(157)
+@STRUCT ktor-server/(1.1k) ktor-client/(770) ktor-shared/(241) ktor-utils/(178) ktor-network/(171) ktor-http/(137)…
+
+---CONTEXT---
+@PURPOSE Ktor is asynchronous framework for creating microservices, web applications and more. Written in Kotlin from ground up. First add dependency to your project: ```kotlin repositories {…
+@CONVENTIONS ### Formatting (EditorConfig is authoritative) Kotlin style: IntelliJ + `KOTLIN_OFFICIAL` (`.editorconfig`). Indent: 4 spaces (JSON/YAML: 2); max line length: 120; end of line: LF. Use `./gradlew…
+

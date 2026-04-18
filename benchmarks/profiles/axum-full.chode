@@ -1,0 +1,13 @@
+---CHODE v2 @ 309d1bd---
+
+---DNA---
+@STACK rust
+@CI github-actions
+@PKG cargo
+@AUTH jwt oauth
+@PACKAGES axum-macros/(123) axum/(60) axum-extra/(31) axum-core/(18)
+@STRUCT axum-macros/(173) examples/(154) axum/(85) axum-extra/(37) axum-core/(22)
+
+---CONTEXT---
+@PURPOSE 🎈 Thanks for your help improving project! We are so happy to have you! There are opportunities to contribute to `axum` at any level. It doesn't matter if you are getting started with Rust or are…
+

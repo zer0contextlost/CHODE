@@ -1,0 +1,14 @@
+---CHODE v2 @ 49b4241e---
+
+---DNA---
+@STACK scala
+@CI github-actions
+@PACKAGES sbt-test/(961) library/(949) compiler/(732) presentation-compiler/(161) scaladoc/(142)
+@STRUCT sbt-test/(1.4k) library/(953) compiler/(780) scaladoc/(532) presentation-compiler/(161) repl/(156)…
+@PATTERNS plugin
+
+---CONTEXT---
+@PURPOSE Dotty is Scala 3 compiler (`dotc`). It compiles Scala source code into JVM bytecode (and optionally Scala.js IR). compiler is itself written in Scala 3.
+@SETUP Scala's compiler is written in Scala. typical compiler contributor knows language already and is familiar with general architecture of compilers. One good way to get started is to participate in…
+@GOTCHAS `_` type wildcards #18813 `private[this]` #18819 `var x = _` #18821 `with` as type operator #18837 `xs: _*` varargs #18872 trailing `_` to force eta expansion #18926 # Other changes and fixes
+

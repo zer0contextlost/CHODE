@@ -13,4 +13,5 @@
 @PATTERNS plugin
 
 ---CONTEXT---
-@PURPOSE ### Use as standalone app You could download prebuilt executable for your platform from Releases page. Once downloaded, extract archive and run `./pocketbase serve` in extracted directory. prebuilt executables are based on `examples/base/main.go` file and comes with JS VM plugin enabled by default which allows to extend PocketBase with…
+@PURPOSE ### Use as standalone app You could download prebuilt executable for your platform from Releases page. Once downloaded, extract archive and run `./pocketbase serve` in extracted directory.…
+

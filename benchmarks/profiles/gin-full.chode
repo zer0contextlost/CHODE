@@ -1,0 +1,16 @@
+---CHODE v2 @ d3ffc99---
+
+---DNA---
+@STACK go testify
+@CI github-actions
+@PKG gomod
+@TEST make test
+@API mongodb
+@PACKAGES binding/(30) render/(17) codec/(5) internal/(4) ginS/(2)
+@STRUCT binding/(30) render/(17) codec/(5) internal/{bytesconv,fs}(4) ginS/(3)
+
+---CONTEXT---
+@SETUP ### Prerequisites Go version: Gin requires Go version 1.25 or above Basic Go knowledge: Familiarity with Go syntax and package management is helpful ### Installation With Go's module support,…
+@ENV > Configure HTTP servers, TLS, proxies, and runtime settings. ### Custom HTTP configuration Use `http.ListenAndServe()` directly, like this: ```go func main() { router := gin.Default()…
+@TESTING `net/http/httptest` package is preferable way for HTTP testing. ```go package main import ( "net/http" "github.com/gin-gonic/gin" ) func setupRouter() *gin.Engine { r := gin.Default()…
+

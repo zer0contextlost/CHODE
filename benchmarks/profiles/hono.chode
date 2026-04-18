@@ -1,0 +1,19 @@
+---CHODE v2 @ cf2d2b7---
+
+---DNA---
+@STACK hono typescript hono react express vitest zod
+@CI github-actions
+@PKG bun
+@TEST vitest
+@ENTRY src/index.ts
+@ROUTES src/router.ts
+@AUTH jwt
+@PACKAGES src/(306) benchmarks/(29) runtime-tests/(21) perf-measures/(4)
+@STRUCT src/{middleware,adapter,jsx,utils,helper,router}(307) benchmarks/(77) runtime-tests/(45) perf-measures/(12)
+@PATTERNS factory middleware-chain
+@MIDDLEWARE src/middleware/
+
+---CONTEXT---
+@PURPOSE Hono - _means flame🔥 in Japanese_ - is small, simple, and ultrafast web framework built on Web Standards. It works on any JavaScript runtime: Cloudflare Workers, Fastly Compute, Deno, Bun, Vercel,…
+@CONVENTIONS Community leaders will follow these Community Impact Guidelines in determining consequences for any action they deem in violation of this Code of Conduct: ### 1. Correction Community Impact: Use…
+
