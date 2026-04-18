@@ -721,6 +721,7 @@ CHODE is open source and available at github.com/zer0contextlost/CHODE. It runs 
 2. Models accessed via OpenRouter. Calls made at temperature=0. All result files timestamped and committed.
 3. The logprob experiment required direct OpenAI API access for `logprobs: true` support; all other evaluations used OpenRouter.
 4. Flash/ruff parser artifact in Thread 12: Gemini Flash 2.5 emits thinking tokens; the extended reasoning preamble shifted Q-label positions in one benchmark run, causing parser miss. Manual verification confirmed all 4 answers correct. Score reported as corrected value.
+5. This paper was submitted to a multi-model AI peer review prior to publication. GPT-4o, GPT-4o-mini, Gemini 2.5 Flash, Gemini 2.5 Pro, Mistral Large, and Llama 4 Maverick were each asked to independently review the full paper and assess methodology, claims, gaps, and recommendations. Their responses informed the Limitations section (§14) and the planned benchmark extensions (§16.4). Full peer review output is available in `benchmarks/results/peer-review-2026-04-18T02-25-50.md`.
 
 ---
 
