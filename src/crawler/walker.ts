@@ -1,4 +1,4 @@
-import { readdir, readFile } from 'node:fs/promises';
+import { readdir, readFile, realpath } from 'node:fs/promises';
 import { join, relative, sep } from 'node:path';
 
 const DEFAULT_IGNORE = new Set([
@@ -18,7 +18,9 @@ export async function walk(root: string): Promise<WalkResult> {
   const ignoreGlobs = await loadIgnoreFiles(root);
   const files: string[] = [];
   const dirs: string[] = [];
-  await walkDir(root, root, files, dirs, ignoreGlobs);
+  // Fixes #1: resolve root to its real path so symlink boundary checks are consistent
+  const realRoot = await realpath(root).catch(() => root);
+  await walkDir(realRoot, realRoot, files, dirs, ignoreGlobs);
   files.sort();
   dirs.sort();
   return { files, dirs };
@@ -48,7 +50,18 @@ async function walkDir(
 
     if (matchesAny(rel, entry.isDirectory(), ignoreGlobs)) continue;
 
-    if (entry.isDirectory()) {
+    if (entry.isSymbolicLink()) {
+      // Fixes #1: resolve symlink and skip if it escapes the repository root
+      try {
+        const real = await realpath(full);
+        const rootWithSep = root.endsWith(sep) ? root : root + sep;
+        if (real !== root && !real.startsWith(rootWithSep)) continue;
+        // Symlink points within the root — treat as file (not recursed as dir)
+        files.push(full);
+      } catch {
+        // Broken symlink — skip silently
+      }
+    } else if (entry.isDirectory()) {
       dirs.push(full);
       subTasks.push(walkDir(root, full, files, dirs, ignoreGlobs));
     } else if (entry.isFile()) {
