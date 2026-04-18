@@ -9,6 +9,10 @@ const DEFAULT_IGNORE = new Set([
 
 const IGNORE_FILES = new Set(['.chode', '.chode.hash']);
 
+// Fixes #2: hard limits to prevent resource exhaustion on adversarial repos
+const MAX_FILES = 100_000;
+const MAX_DEPTH = 50;
+
 export type WalkResult = {
   files: string[];
   dirs: string[];
@@ -20,7 +24,7 @@ export async function walk(root: string): Promise<WalkResult> {
   const dirs: string[] = [];
   // Fixes #1: resolve root to its real path so symlink boundary checks are consistent
   const realRoot = await realpath(root).catch(() => root);
-  await walkDir(realRoot, realRoot, files, dirs, ignoreGlobs);
+  await walkDir(realRoot, realRoot, files, dirs, ignoreGlobs, 0);
   files.sort();
   dirs.sort();
   return { files, dirs };
@@ -32,7 +36,11 @@ async function walkDir(
   files: string[],
   dirs: string[],
   ignoreGlobs: RegExp[],
+  depth: number,
 ): Promise<void> {
+  // Fixes #2: abort if depth or file count limits are exceeded
+  if (depth > MAX_DEPTH || files.length >= MAX_FILES) return;
+
   let entries;
   try {
     entries = await readdir(dir, { withFileTypes: true });
@@ -42,6 +50,7 @@ async function walkDir(
 
   const subTasks: Promise<void>[] = [];
   for (const entry of entries) {
+    if (files.length >= MAX_FILES) break; // Fixes #2: stop collecting once limit reached
     if (DEFAULT_IGNORE.has(entry.name)) continue;
     if (entry.isFile() && IGNORE_FILES.has(entry.name)) continue;
 
@@ -63,7 +72,7 @@ async function walkDir(
       }
     } else if (entry.isDirectory()) {
       dirs.push(full);
-      subTasks.push(walkDir(root, full, files, dirs, ignoreGlobs));
+      subTasks.push(walkDir(root, full, files, dirs, ignoreGlobs, depth + 1));
     } else if (entry.isFile()) {
       files.push(full);
     }
