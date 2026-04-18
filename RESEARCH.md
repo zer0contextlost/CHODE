@@ -645,7 +645,39 @@ Next.js (27,000 files) required ~567 token profiles but raw self-profiling excee
 
 ---
 
-## 16. Conclusion
+## 16. Future Work — Implications for Model Training
+
+The results in this paper are inference-only. No model weights were modified, and no training experiments were conducted. However, the failure modes identified — Prior Overwhelming and Attention Dilution — are not inference artifacts. They are training artifacts: behaviors baked into models by the distribution of their training data.
+
+This suggests a testable hypothesis.
+
+### 16.1 The Hypothesis
+
+If structured, labeled, explicitly-extracted knowledge outperforms raw documentation at inference time, the same principle may apply at training time. A model fine-tuned on structured profile + Q&A pairs may exhibit stronger orientation behavior than a model trained on equivalent volumes of raw documentation.
+
+Concretely: rather than training on 40,000 tokens of repository source files and documentation, train on the 350-token CHODE profile paired with correct answers to orientation questions. The signal-to-noise ratio improves by roughly 122×. If the inference results generalize, training accuracy should improve proportionally.
+
+### 16.2 What the Experiment Would Look Like
+
+A minimal test requires:
+
+1. A base model with no prior exposure to the target repositories
+2. Two fine-tuning datasets of equivalent question-answer pairs — one built from raw documentation, one built from CHODE profiles
+3. Evaluation on held-out orientation questions using the same benchmark protocol as this paper
+
+The prediction: the CHODE-trained model scores higher on orientation tasks and hallucinates less on out-of-profile questions, because the training signal it received was structured and precise rather than narrative and diffuse.
+
+### 16.3 The Broader Implication
+
+CHODE is not a compression tool in the traditional sense — it does not summarize. It extracts specific facts into labeled fields and discards everything else. Applied at training scale, this is a data curation methodology: strip the noise, label the signal, cap the length.
+
+The internet-scale training corpora that underpin current frontier models are overwhelmingly narrative. Models trained on them learn to approximate the shape of knowledge without reliably retaining specific facts. The inference-time failure of self-profiling is a symptom of this: the model learned what repository documentation looks like, not what repositories contain.
+
+A training corpus built on structured extraction — not just for code, but for any domain where specific facts matter more than narrative flow — may produce models with qualitatively different retrieval behavior. This paper provides the proof of concept at inference scale. Empirical validation at training scale remains future work.
+
+---
+
+## 17. Conclusion
 
 We presented CHODE, a static analysis tool that generates ~200–400 token structured repository profiles from file trees and documentation files without reading source code or invoking a language model. Across 27 repositories and 6 frontier models, CHODE profiles consistently outperform raw documentation context, README-only context, and LLM-generated summaries on orientation task accuracy.
 
