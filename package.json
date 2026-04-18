@@ -4,7 +4,8 @@
   "description": "Compressed Hierarchical Output for Developer Efficiency",
   "type": "module",
   "bin": {
-    "chode": "./src/index.ts"
+    "chode": "./src/index.ts",
+    "chode-mcp": "./src/mcp.ts"
   },
   "scripts": {
     "dev": "bun run src/index.ts",
@@ -16,5 +17,8 @@
   "devDependencies": {
     "@types/bun": "latest",
     "typescript": "^5.4.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0"
   }
 }
