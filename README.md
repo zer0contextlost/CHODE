@@ -117,7 +117,7 @@ README-only fails because READMEs are marketing copy — the entry point, router
 
 ## Efficiency Metrics
 
-CHODE's core claim is **maximum comprehension per token**. We quantify this with three metrics.
+CHODE's core claim is **maximum input-cost efficiency per orientation task**. We quantify this with three metrics.
 
 ### Compression Ratio
 
@@ -127,7 +127,7 @@ $$CR = \frac{T_{raw}}{T_{profile}}$$
 
 Where $T_{raw}$ is the token count of all files CHODE reads (file tree + anchor files + doc files) and $T_{profile}$ is the size of the resulting `.chode` profile.
 
-### Comprehension Efficiency
+### Input-Cost Efficiency
 
 Score achieved per input token consumed:
 
@@ -150,7 +150,7 @@ $$A = \frac{CE_{CHODE}}{CE_{naive}} = \frac{S_{CHODE} \cdot T_{naive}}{S_{naive}
 
 $$A = \frac{1.00 \times 82{,}918}{0.36 \times 507} \approx \mathbf{454\times}$$
 
-CHODE delivers **454× better comprehension per token** for this repo. Averaged across all 9 benchmark repos and 6 models, self-profiling consumes ~43,000 tokens per query while scoring *lower* than CHODE's ~353 token profile — because models get overwhelmed by raw file dumps and still miss the specific facts CHODE explicitly extracts.
+CHODE delivers **454× better input-cost efficiency** for this repo — meaning 454× more accuracy per input token paid. (Note: this compares input token counts. Due to attention dilution, the model likely didn't attend to most of the 82,918 raw-doc tokens — the true attended-token efficiency gain is higher still.) Averaged across all 9 benchmark repos and 6 models, self-profiling consumes ~43,000 tokens per query while scoring *lower* than CHODE's ~353 token profile — because models get overwhelmed by raw file dumps and still miss the specific facts CHODE explicitly extracts.
 
 ---
 

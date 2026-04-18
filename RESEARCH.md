@@ -12,7 +12,7 @@ Independent Research · github.com/zer0contextlost/CHODE
 | CHODE avg benchmark score across 9 repos × 6 models | **90%** |
 | Self-profiling score (~43,000 tokens, raw docs) | **40%** |
 | Fewer tokens than self-profiling, on average | **122×** |
-| Better comprehension per token (Gitea + GPT-4o) | **454×** |
+| Better input-cost efficiency vs self-profiling (Gitea + GPT-4o) | **454×** |
 
 ---
 
@@ -558,7 +558,7 @@ This is a direct empirical demonstration of the density collapse hypothesis: **m
 
 ## 13. Efficiency Metrics
 
-We define three metrics to quantify CHODE's core claim: maximum comprehension per token.
+We define three metrics to quantify CHODE's core claim: maximum input-cost efficiency per orientation task.
 
 ### 13.1 Compression Ratio
 
@@ -599,7 +599,7 @@ A = CE_CHODE / CE_naive = (S_CHODE × T_naive) / (S_naive × T_CHODE)
 A = (1.00 × 82,918) / (0.36 × 507) ≈ 454×
 ```
 
-CHODE delivers **454× better comprehension per token** for Gitea + GPT-4o. Averaged across all 9 benchmark repositories and 6 models, self-profiling consumes ~43,000 tokens per query while scoring lower than CHODE's ~353 token profile.
+CHODE delivers **454× better input-cost efficiency** for Gitea + GPT-4o — meaning 454× more accuracy per input token paid. Note: this metric compares input token counts, not effective attended tokens. Due to attention dilution, the model likely did not attend to most of the 82,918 self-profiling tokens. The true efficiency gain over *attended* tokens is lower; the figure is valid as an input-cost comparison. Averaged across all 9 benchmark repositories and 6 models, self-profiling consumes ~43,000 tokens per query while scoring lower than CHODE's ~353 token profile.
 
 ### 13.5 Cost Arbitrage
 
@@ -750,6 +750,26 @@ Add 5 non-conventional repos to the primary benchmark: a monorepo (Turborepo), a
 **9. Independent question authorship** *(Planned)*
 Have three independent authors unfamiliar with the benchmark write stump questions for 3 repos. Compare scores on author-generated vs. independent questions to quantify authorship bias. A significant gap would indicate the current question set is inadvertently tuned to CHODE's output format.
 
+### 16.5 Follow-up Peer Review — Model Verdicts After Empirical Responses
+
+After the six new benchmarks were completed, the full paper, each model's original criticisms, and the empirical benchmark answers were returned to all six reviewer models. Each was asked: which criticisms are now resolved, which remain open, and has confidence in the core claims changed?
+
+**Resolved — unanimous across all 6 models:**
+All seven criticisms from the original peer review were resolved by the empirical evidence. Models explicitly confirmed resolution of: strict scoring (semantic delta negligible), unseen repo generalization (93% matches original 90%), context position robustness (no recency bias), multi-repo concatenation (zero interference to 13 profiles), scalability quantification (clean at all tiers), density collapse (step function confirmed at ~509 tokens), and adversarial robustness (8/10, plausible-wrong anchored correctly by profile).
+
+**Remaining open — consistent across all 6 models:**
+Two planned experiments not yet executed: unconventional repository benchmark (§16.4, item 8) and independent question authorship (§16.4, item 9). Mistral Large additionally flagged that self-profiling token count variance is unreported — some repos (e.g., Next.js) may exceed model context limits, artificially deflating self-profile scores.
+
+**Confidence in core claims — updated model verdicts:**
+
+| Claim | Verdict |
+|---|---|
+| 90% benchmark accuracy | High / increased — replicated across unseen repos and scoring methodologies |
+| Self-profiling degrades below baseline | Very high — "No remaining caveats" (Mistral Large) |
+| Structure beats volume | High / significantly increased — confirmed by density, scalability, and adversarial tests |
+
+Full follow-up review output is available in `benchmarks/results/peer-review-followup2-2026-04-18T02-52-41.md`.
+
 ---
 
 ## 17. Conclusion
@@ -770,7 +790,7 @@ CHODE is open source and available at github.com/zer0contextlost/CHODE. It runs 
 2. Models accessed via OpenRouter. Calls made at temperature=0. All result files timestamped and committed.
 3. The logprob experiment required direct OpenAI API access for `logprobs: true` support; all other evaluations used OpenRouter.
 4. Flash/ruff parser artifact in Thread 12: Gemini Flash 2.5 emits thinking tokens; the extended reasoning preamble shifted Q-label positions in one benchmark run, causing parser miss. Manual verification confirmed all 4 answers correct. Score reported as corrected value.
-5. This paper was submitted to a multi-model AI peer review prior to publication. GPT-4o, GPT-4o-mini, Gemini 2.5 Flash, Gemini 2.5 Pro, Mistral Large, and Llama 4 Maverick were each asked to independently review the full paper and assess methodology, claims, gaps, and recommendations. Their responses informed the Limitations section (§14) and the planned benchmark extensions (§16.4). Full peer review output is available in `benchmarks/results/peer-review-2026-04-18T02-25-50.md`.
+5. This paper underwent two rounds of multi-model AI peer review. Round 1: GPT-4o, GPT-4o-mini, Gemini 2.5 Flash, Gemini 2.5 Pro, Mistral Large, and Llama 4 Maverick independently reviewed the full paper and raised 7 criticisms across methodology, generalization, and efficiency framing. Their criticisms informed §14 (Limitations) and §16.4 (Responses to AI Peer Review). Round 2: all six models received their original criticisms alongside empirical benchmark answers; all 7 criticisms were resolved with data. Full outputs: `benchmarks/results/peer-review-2026-04-18T02-25-50.md` and `benchmarks/results/peer-review-followup2-2026-04-18T02-52-41.md`.
 
 ---
 
