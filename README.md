@@ -1,5 +1,7 @@
 # CHODE
 
+> *"I fully understand that what I know is based on what I didn't understand."*
+
 **Compressed Hierarchical Overview of Directory and Ecosystems**
 
 A CLI tool that generates a compressed, token-efficient profile of any software repository — giving AI assistants maximum repo comprehension for minimum context cost.
