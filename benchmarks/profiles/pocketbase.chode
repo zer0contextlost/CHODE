@@ -1,0 +1,16 @@
+---CHODE v2 @ 58f605e---
+
+---DNA---
+@STACK go jwt cobra oauth2
+@CI github-actions
+@PKG gomod
+@TEST make test make test-report
+@ENTRY ui/src/main.js
+@DATA migrations/ (7 migrations)
+@AUTH oauth
+@PACKAGES core/(132) apis/(73) ui/(48) plugins/(19) forms/(8)
+@STRUCT ui/(314) tools/(185) core/(132) apis/(73) plugins/(19) forms/(8) migrations/(7) mails/(5) cmd/(3)
+@PATTERNS plugin
+
+---CONTEXT---
+@PURPOSE ### Use as standalone app You could download prebuilt executable for your platform from Releases page. Once downloaded, extract archive and run `./pocketbase serve` in extracted directory. prebuilt executables are based on `examples/base/main.go` file and comes with JS VM plugin enabled by default which allows to extend PocketBase with…

@@ -1,0 +1,13 @@
+---CHODE v2---
+
+---DNA---
+@STACK rust anyhow log serde_json
+@CI github-actions
+@PKG cargo
+@ENTRY crates/core/main.rs
+@PACKAGES crates/(88) fuzz/(1) pkg/(1)
+@STRUCT crates/(136) benchsuite/(30) fuzz/(5) ci/(4) pkg/{windows,brew}(3)
+
+---CONTEXT---
+@PURPOSE ripgrep (rg) ------------ ripgrep is line-oriented search tool that recursively searches current directory for regex pattern. By default, ripgrep will respect gitignore rules and skip hidden files/directories and binary files. (To disable all automatic filtering by default, use `rg -uuu`.) ripgrep has first class support on Windows, macOS and…
+@SETUP This crate relies on `cargo-fuzz` component. To install this component, run following from `fuzz` directory: ```bash cargo install cargo-fuzz ```

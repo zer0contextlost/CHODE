@@ -1,0 +1,19 @@
+---CHODE v2---
+
+---DNA---
+@STACK php queue phpunit
+@FRONTEND ts astro
+@CI github-actions
+@PKG npm composer
+@CONFIG ini
+@ROUTES app/controllers/ (13 files)
+@AUTH 2fa oauth
+@PACKAGES src/(952) app/(89)
+@STRUCT src/{Appwrite,Utopia,Executor}(953) app/{config,views,controllers,init,assets}(568)
+@PATTERNS plugin
+
+---CONTEXT---
+@PURPOSE Appwrite Appwrite is open-source, all-in-one development platform. Use built-in backend infrastructure and web hosting, all from single place. English | 简体中文 Appwrite is open-source development platform for building web, mobile, and AI applications. It brings together backend infrastructure and web hosting in one place, so teams can…
+@CONVENTIONS PSR-12 formatting enforced by Pint. PSR-4 autoloading. `resourceType` values are always plural: `'functions'`, `'sites'`, `'deployments'`. When updating documents, pass only changed attributes as sparse Document: ```php // correct $dbForProject->updateDocument('users', $user->getId(), new Document([ 'name' => $name, ])); //…
+@SETUP easiest way to get started with Appwrite is by signing up for Appwrite Cloud. While Appwrite Cloud is in public beta, you can build with Appwrite completely free, and we won't collect your credit card information.
+@TESTING To run all tests manually, use Appwrite Docker CLI from your terminal: ```bash docker compose exec appwrite test ``` To run unit tests use: ```bash docker compose exec appwrite test /usr/src/code/tests/unit ``` To run end-2-end tests use: ```bash docker compose exec appwrite test /usr/src/code/tests/e2e ``` To run end-2-end tests for…

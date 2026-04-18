@@ -1,0 +1,15 @@
+---CHODE v2 @ 4430756---
+
+---DNA---
+@STACK go chi cobra testify otel zap
+@CI github-actions
+@PKG gomod
+@ENTRY cmd/caddy/main.go
+@API prometheus
+@PACKAGES modules/(199) caddyconfig/(33) caddytest/(20) cmd/(13) internal/(10)
+@STRUCT caddytest/(258) modules/{caddyhttp,caddytls,caddypki,logging,metrics,caddyevents}(207) caddyconfig/(51) cmd/(14)…
+
+---CONTEXT---
+@PURPOSE Caddy is most often used as HTTPS server, but it is suitable for any long-running Go program. First and foremost, it is platform to run Go applications. Caddy "apps" are Go programs that are…
+@CONVENTIONS ### Go Idioms Follow Go Code Review Comments: Error flow: Early return, indent error handling—not else blocks ```go if err != nil { return err } // normal code ``` Naming:…
+@SETUP simplest, cross-platform way to get started is to download Caddy from GitHub Releases and place executable file in your PATH. See our online documentation for other install instructions.

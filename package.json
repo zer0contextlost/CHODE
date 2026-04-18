@@ -1,0 +1,20 @@
+{
+  "name": "chode",
+  "version": "0.0.1",
+  "description": "Compressed Hierarchical Output for Developer Efficiency",
+  "type": "module",
+  "bin": {
+    "chode": "./src/index.ts"
+  },
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "build": "bun build --compile src/index.ts --outfile chode",
+    "test": "node --experimental-strip-types benchmarks/regression.ts",
+    "test:update": "node --experimental-strip-types benchmarks/regression.ts --update",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.4.0"
+  }
+}

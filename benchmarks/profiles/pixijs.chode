@@ -1,0 +1,16 @@
+---CHODE v2 @ 8f42bb7---
+
+---DNA---
+@STACK pixi.js typescript vite jest
+@CI github-actions
+@PKG npm
+@TEST jest
+@ENTRY src/index.ts
+@ROUTES src/app/ (10 files)
+@PACKAGES src/(894) playground/(21) types/(4) transcoders/(2)
+@STRUCT src/{scene,rendering,assets,compressed-textures,filters,utils}(1.0k) examples/(209) playground/(28) scripts/(25)…
+@PATTERNS event-driven plugin
+
+---CONTEXT---
+@PURPOSE Guides | Tutorials | Examples | API Docs | Discord | Bluesky | 𝕏 > Next-Generation, Fastest HTML5 Creation Engine for Web 🚀 WebGL & WebGPU Renderers ⚡️ Unmatched Performance & Speed 🎨 Easy to…
+@GOTCHAS All `*.playground.ts` files are gitignored except `default.playground.ts` Changes to playground files hot-reload instantly Changes to PixiJS source trigger rebuild (watch mode) and auto-reload…

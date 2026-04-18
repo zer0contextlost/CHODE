@@ -1,0 +1,20 @@
+---CHODE v2---
+
+---DNA---
+@STACK go python php phpunit java vertx mockito elixir jason
+@FRONTEND ts react rollup
+@CI github-actions
+@PKG gomod
+@TEST mocha mix test pytest
+@ENTRY cmd/init/main.go
+@PACKAGES sdk/(585) internal/(491) core/(338) engine/(196) dagql/(113)
+@STRUCT sdk/(1.5k) core/{integration,schema,sdk,prompts,docs,workspace}(651) internal/{buildkit,fsutil,testutil,cloud}(524) engine/(220) dagql/(210) toolchains/(206) modules/{evals,gha,evaluator,doug,metrics,alpine}(167) cmd/{codegen,engine,dnsname,dialstdio,introspect,dump-id}(133) util/(49) skills/(24) network/(9) hack/(7) version/(6)
+@PATTERNS strategy(buildkit) plugin
+@MIDDLEWARE internal/testutil/
+
+---CONTEXT---
+@PURPOSE best way to find good contribution is to use Dagger for something. Then write down what problems you encounter. Could be as simple as question you had, that docs didn't answer. Or bug in tool, or missing feature. Then pick item that you're comfortable with in terms of difficulty, and give it try. 🙂 You can ask questions along way, we're always…
+@CONVENTIONS General guidelines when making technical decisions: Aim for best developer experience, in way that is idiomatic to language. It should feel as natural as possible to its users. Try to keep consistency with stable SDKs, unless where it contradicts with previous point which is more important. Try to keep SDK as thin as possible to reduce maintenance…
+@ENV There should be `README.md` file with instructions for installation, usage and for setting up local environment with everything needed to develop. This may include how to run tests, code linting and code generation (codegen).
+@TESTING Add tests as you develop. Increasing coverage is harder later. When codegen component is done, easy win is to port integration tests from Go SDK. Replicating those exact pipelines will allow boost in performance when running all SDK tests, by getting cached results from API.
+@GOTCHAS Naming: Directive names use camelCase (`myFeature`), pragma names match (`+myFeature`) Field tags: Core types use `` `field:"true" doc:"..."` `` for GraphQL exposure Array handling: Use `ast.ChildValueList` for list values in directives Optional fields: Use `default:""` or `default:"[]"` in resolver struct tags Pragma parsing: Uses regex…

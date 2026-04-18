@@ -1,0 +1,10 @@
+---CHODE v2 @ 9fe3ad7---
+
+---DNA---
+@STACK python
+@CI github-actions
+@PACKAGES moondream/(29) recipes/(9)
+@STRUCT moondream/(31) recipes/(23)
+
+---CONTEXT---
+@PURPOSE Moondream is highly efficient open-source vision language model that combines powerful image understanding capabilities with remarkably small footprint. It's designed to be versatile and accessible, capable of running on wide range of devices and platforms. project offers two model variants: Moondream 2B: primary model with 2 billion…

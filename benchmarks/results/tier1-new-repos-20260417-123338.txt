@@ -1,0 +1,60 @@
+=== django / mistralai/mistral-large-2512 ===
+  Auto-scored: 12 questions → 30/36
+=== django / google/gemini-2.5-pro ===
+  Auto-scored: 12 questions → 33/36
+=== django / google/gemini-2.5-flash ===
+  Auto-scored: 12 questions → 32/36
+=== django / openai/gpt-4o ===
+  Auto-scored: 12 questions → 33/36
+=== django / openai/gpt-4o-mini ===
+  Auto-scored: 12 questions → 29/36
+=== django / meta-llama/llama-4-maverick ===
+  Auto-scored: 12 questions → 27/36
+=== laravel / mistralai/mistral-large-2512 ===
+  Auto-scored: 12 questions → 32/36
+=== laravel / google/gemini-2.5-pro ===
+  Auto-scored: 12 questions → 32/36
+=== laravel / google/gemini-2.5-flash ===
+  Auto-scored: 12 questions → 31/36
+=== laravel / openai/gpt-4o ===
+  Auto-scored: 12 questions → 32/36
+=== laravel / openai/gpt-4o-mini ===
+  Auto-scored: 12 questions → 32/36
+=== laravel / meta-llama/llama-4-maverick ===
+  Auto-scored: 12 questions → 32/36
+=== phoenix / mistralai/mistral-large-2512 ===
+  Auto-scored: 12 questions → 32/36
+=== phoenix / google/gemini-2.5-pro ===
+  Auto-scored: 12 questions → 32/36
+=== phoenix / google/gemini-2.5-flash ===
+  Auto-scored: 12 questions → 30/36
+=== phoenix / openai/gpt-4o ===
+  Auto-scored: 12 questions → 33/36
+=== phoenix / openai/gpt-4o-mini ===
+  Auto-scored: 12 questions → 30/36
+=== phoenix / meta-llama/llama-4-maverick ===
+  Auto-scored: 12 questions → 30/36
+=== ripgrep / mistralai/mistral-large-2512 ===
+  Auto-scored: 12 questions → 35/36
+=== ripgrep / google/gemini-2.5-pro ===
+  Auto-scored: 12 questions → 35/36
+=== ripgrep / google/gemini-2.5-flash ===
+  Auto-scored: 12 questions → 35/36
+=== ripgrep / openai/gpt-4o ===
+  Auto-scored: 12 questions → 36/36
+=== ripgrep / openai/gpt-4o-mini ===
+  Auto-scored: 12 questions → 35/36
+=== ripgrep / meta-llama/llama-4-maverick ===
+  Auto-scored: 12 questions → 35/36
+=== gh-cli / mistralai/mistral-large-2512 ===
+  Auto-scored: 12 questions → 34/36
+=== gh-cli / google/gemini-2.5-pro ===
+  Auto-scored: 12 questions → 32/36
+=== gh-cli / google/gemini-2.5-flash ===
+  Auto-scored: 12 questions → 34/36
+=== gh-cli / openai/gpt-4o ===
+  Auto-scored: 12 questions → 34/36
+=== gh-cli / openai/gpt-4o-mini ===
+  Auto-scored: 12 questions → 34/36
+=== gh-cli / meta-llama/llama-4-maverick ===
+  Auto-scored: 12 questions → 34/36

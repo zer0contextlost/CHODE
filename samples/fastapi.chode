@@ -1,0 +1,16 @@
+---CHODE v2---
+
+---DNA---
+@STACK python starlette pydantic
+@CI github-actions
+@PKG uv
+@CONFIG toml
+@ENTRY fastapi/applications.py
+@ROUTES fastapi/routing.py
+@PACKAGES docs_src/(455) fastapi/(48)
+@STRUCT docs_src/(457) scripts/(70) fastapi/(53)
+@PATTERNS event-driven middleware-chain
+
+---CONTEXT---
+@PURPOSE FastAPI framework, high performance, easy to learn, fast to code, ready for production --- Documentation: Source Code: --- FastAPI is modern, fast (high-performance), web framework for building APIs with Python based on standard Python type hints. key features are: Fast: high performance, on par with NodeJS…
+@SETUP Create and activate virtual environment and then install FastAPI: ```console $ pip install "fastapi[standard]" ---> 100% ``` Note: Make sure you put `"fastapi[standard]"` in quotes to ensure it works in all terminals.

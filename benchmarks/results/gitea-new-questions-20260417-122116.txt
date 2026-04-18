@@ -1,0 +1,18 @@
+=== gitea / mistralai/mistral-large-2512 ===
+  Questions: 12 (repo-specific)
+  Auto-scored: 12 questions → 36/36
+=== gitea / google/gemini-2.5-pro ===
+  Questions: 12 (repo-specific)
+  Auto-scored: 12 questions → 36/36
+=== gitea / google/gemini-2.5-flash ===
+  Questions: 12 (repo-specific)
+  Auto-scored: 12 questions → 30/36
+=== gitea / openai/gpt-4o ===
+  Questions: 12 (repo-specific)
+  Auto-scored: 12 questions → 36/36
+=== gitea / openai/gpt-4o-mini ===
+  Questions: 12 (repo-specific)
+  Auto-scored: 12 questions → 36/36
+=== gitea / meta-llama/llama-4-maverick ===
+  Questions: 12 (repo-specific)
+  Auto-scored: 12 questions → 36/36

@@ -1,0 +1,36 @@
+=== benchmarks/fastapi / mistralai/mistral-large-2512 ===
+  Auto-scored: 20 questions → 52/60
+=== benchmarks/fastapi / google/gemini-2.5-pro ===
+  Auto-scored: 20 questions → 58/60
+=== benchmarks/fastapi / google/gemini-2.5-flash ===
+  Auto-scored: 20 questions → 48/60
+=== benchmarks/fastapi / openai/gpt-4o ===
+  Auto-scored: 20 questions → 42/60
+=== benchmarks/fastapi / openai/gpt-4o-mini ===
+  Auto-scored: 20 questions → 39/60
+=== benchmarks/fastapi / meta-llama/llama-4-maverick ===
+  Auto-scored: 20 questions → 52/60
+=== benchmarks/rails / mistralai/mistral-large-2512 ===
+  Auto-scored: 24 questions → 20/72
+=== benchmarks/rails / google/gemini-2.5-pro ===
+  Auto-scored: 24 questions → 37/72
+=== benchmarks/rails / google/gemini-2.5-flash ===
+  Auto-scored: 24 questions → 21/72
+=== benchmarks/rails / openai/gpt-4o ===
+  Auto-scored: 24 questions → 19/72
+=== benchmarks/rails / openai/gpt-4o-mini ===
+  Auto-scored: 24 questions → 17/72
+=== benchmarks/rails / meta-llama/llama-4-maverick ===
+  Auto-scored: 24 questions → 27/72
+=== benchmarks/nextjs / mistralai/mistral-large-2512 ===
+  Auto-scored: 19 questions → 42/57
+=== benchmarks/nextjs / google/gemini-2.5-pro ===
+  Auto-scored: 19 questions → 38/57
+=== benchmarks/nextjs / google/gemini-2.5-flash ===
+  Auto-scored: 19 questions → 35/57
+=== benchmarks/nextjs / openai/gpt-4o ===
+  Auto-scored: 19 questions → 37/57
+=== benchmarks/nextjs / openai/gpt-4o-mini ===
+  Auto-scored: 19 questions → 29/57
+=== benchmarks/nextjs / meta-llama/llama-4-maverick ===
+  Auto-scored: 19 questions → 39/57

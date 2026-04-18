@@ -1,0 +1,17 @@
+---CHODE v2---
+
+---DNA---
+@STACK rust cpp
+@CI github-actions
+@PKG cargo pip
+@CONFIG ini
+@PACKAGES Libraries/(3927) AK/(196) UI/(102) Meta/(84) Services/(55)
+@STRUCT Libraries/(4.6k) Meta/(257) AK/(200) UI/(190) Services/{WebContent,RequestServer,WebWorker,WebDriver,ImageDecoder}(71) Base/(66) Documentation/(37) Utilities/(7)
+
+---CONTEXT---
+@PURPOSE Ladybird is truly independent web browser, using novel engine based on web standards. > [!IMPORTANT] > Ladybird is in pre-alpha state, and only suitable for use by developers >
+@CONVENTIONS After parsing and style computation, longhand properties are stored as `StyleValue` pointers in `ComputedProperties`. Any shorthands have been expanded out, and so we do not need to store them directly. These longhands then need to be converted to more usable form. To do this, add getter to `ComputedProperties` with same name as property. It…
+@SETUP Build Instructions Advanced Build Instructions Troubleshooting Testing Profiling Build
+@ENV Clangd will look for configuration information in files named `.clangd` in each of parent directories of file being edited. Ladybird source code repository has top-level `.clangd` configuration file in root directory. One of configuration stanzas in that file specifies location for compilation database. Depending on your build configuration (e.g.,…
+@TESTING When possible, please include tests when fixing bugs or adding new features. If changes you’re making have relevant Web Platform Tests (WPT) tests — especially if changes cause Ladybird to pass any WPT tests it hadn’t yet been passing — you should consider importing those tests into your Ladybird clone, and then commit imported tests along with…
+@GOTCHAS GitHub project contains git notes for each commit that includes e.g. link to pull request from which commit originated and reviewer information. These are updated automatically, but require additional step locally to be able to see notes in `git log`: ```bash git config --add remote.upstream.fetch '+refs/notes/*:refs/notes/*' ``` > [!NOTE] >…

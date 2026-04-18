@@ -1,0 +1,25 @@
+---CHODE v2---
+
+---DNA---
+@STACK go chi mysql jwt pq sqlite3 mssql python
+@FRONTEND ts vue esbuild vite (web_src/)
+@CI github-actions
+@PKG pnpm gomod uv
+@TEST @playwright/test vitest make test make test-backend make test-frontend make test-check make test-sqlite
+@CONFIG ini
+@ENTRY main.go
+@ROUTES chi → routers/ (447 files)
+@DATA models/migrations/ (305 migrations)
+@ENTITIES models/ → actions activities admin asymkey auth avatars dbfs git issues organization packages perm
+@AUTH openid pam password webauthn ldap oauth smtp db oauth2 sspi
+@API azure aws github-api minio prometheus
+@ARCH layered(cmd→routes→svc→mdl) strategy(auth)
+@PACKAGES modules/(968) models/(649) services/(479) routers/(445) cmd/(52)
+@STRUCT modules/{git,setting,markup,packages,structs,indexer}(1.2k) models/{migrations,fixtures,issues,repo,actions,db}(769) templates/{repo,user,package,admin,org,shared}(574) routers/{web,api,private,common,install,utils}(484) services/{repository,auth,pull,context,mailer,convert}(481) web_src/{js,css,svg,fomantic}(376) cmd/(52) contrib/{gitea-monitoring-mixin,ide,backport,legal,init,launchd}(27) docker/(11) tools/(11)
+@PATTERNS strategy(auth) repository middleware-chain
+@MIDDLEWARE routers/common/
+
+---CONTEXT---
+@PURPOSE goal of this project is to make easiest, fastest, and most painless way of setting up self-hosted Git service. As Gitea is written in Go, it works across all platforms and architectures that are supported by Go, including Linux, macOS, and Windows on x86, amd64, ARM and PowerPC architectures. This project has been forked from Gogs since November…
+@CONVENTIONS You should always run `make fmt` before committing to conform to Gitea's styleguide.
+@TESTING Before submitting pull request, run all tests to make sure your changes don't cause regression elsewhere. Here's how to run test suite: code lint | | | |:-------------------- |:--------------------------------------------------------------------------- | |``make lint`` | lint everything (not needed if you only change front- or backend) |…

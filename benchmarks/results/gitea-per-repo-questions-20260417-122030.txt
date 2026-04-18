@@ -1,0 +1,6 @@
+=== gitea / mistralai/mistral-large-2512 ===
+=== gitea / google/gemini-2.5-pro ===
+=== gitea / google/gemini-2.5-flash ===
+=== gitea / openai/gpt-4o ===
+=== gitea / openai/gpt-4o-mini ===
+=== gitea / meta-llama/llama-4-maverick ===

@@ -1,0 +1,18 @@
+---CHODE v2---
+
+---DNA---
+@STACK go oauth cobra testify grpc
+@CI github-actions
+@PKG gomod
+@TEST make test
+@ENTRY cmd/gen-docs/main.go
+@ROUTES api/ (24 files)
+@PACKAGES pkg/(688) internal/(104) api/(24) git/(8) context/(3)
+@STRUCT pkg/{cmd,cmdutil,iostreams,search,extensions,httpmock}(782) acceptance/(114) internal/{codespaces,skills,licenses,config,prompter,docs}(110) api/(24) git/(18) script/(15) context/(3)
+@PATTERNS factory plugin
+
+---CONTEXT---
+@PURPOSE `gh` is GitHub on command line. It brings pull requests, issues, and other GitHub concepts to terminal next to where you are already working with `git` and your code. GitHub CLI is supported for users on GitHub.com, GitHub Enterprise Cloud, and GitHub Enterprise Server 2.20+ with support for macOS, Windows, and Linux.
+@CONVENTIONS Add godoc comments to all exported functions, types, and constants Avoid unnecessary code comments — only comment when why isn't obvious from code Do not comment to restate what code does Never use em dashes (—) in code, comments, or documentation; use regular dashes (-) or rewrite sentence instead
+@SETUP ### macOS Homebrew Precompiled binaries on releases page For additional macOS packages and installers, see community-supported docs ### Linux & Unix Debian, Raspberry Pi, Ubuntu Amazon Linux, CentOS, Fedora, openSUSE, RHEL, SUSE Precompiled binaries on releases page For additional Linux & Unix packages and installers, see community-supported…
+@TESTING acceptance tests are blackbox* tests that are expected to interact with resources on real GitHub instance. They are built on top of `go-internal/testscript` package, which provides framework for building tests for command line tools. *Note: they aren't strictly blackbox because `exec gh` commands delegate to binary set up by `testscript` that…

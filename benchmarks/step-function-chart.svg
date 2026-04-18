@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="420" viewBox="0 0 760 420" font-family="'SF Mono', 'Consolas', 'Monaco', monospace" font-size="12">
+  <!-- Background -->
+  <rect width="760" height="420" fill="#0d1117" rx="8"/>
+
+  <!-- Title -->
+  <text x="380" y="28" text-anchor="middle" fill="#e6edf3" font-size="14" font-weight="bold">Field Cap Ablation — Stump Accuracy vs. Cap Size</text>
+  <text x="380" y="46" text-anchor="middle" fill="#8b949e" font-size="11">% correct on profile-dependent questions · lower cap = less token noise</text>
+
+  <!-- Plot area: x=80..680, y=70..350 -->
+  <!-- Grid background -->
+  <rect x="80" y="70" width="600" height="280" fill="#161b22" rx="4"/>
+
+  <!-- Regression zone shading (cap 200–500) -->
+  <rect x="468" y="70" width="212" height="280" fill="#3d1a1a" opacity="0.5"/>
+  <text x="524" y="88" text-anchor="middle" fill="#f85149" font-size="10" opacity="0.8">regression zone</text>
+
+  <!-- Peak zone shading (cap 80–120) -->
+  <rect x="293" y="70" width="88" height="280" fill="#1a3d1a" opacity="0.5"/>
+  <text x="337" y="88" text-anchor="middle" fill="#3fb950" font-size="10" opacity="0.8">peak</text>
+
+  <!-- Horizontal grid lines at 0%, 20%, 40%, 60%, 80%, 100% -->
+  <!-- y=350 → 0%, y=294 → 20%, y=238 → 40%, y=182 → 60%, y=126 → 80%, y=70 → 100% -->
+  <line x1="80" y1="350" x2="680" y2="350" stroke="#30363d" stroke-width="1"/>
+  <line x1="80" y1="294" x2="680" y2="294" stroke="#30363d" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <line x1="80" y1="238" x2="680" y2="238" stroke="#30363d" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <line x1="80" y1="182" x2="680" y2="182" stroke="#30363d" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <line x1="80" y1="126" x2="680" y2="126" stroke="#30363d" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <line x1="80" y1="70"  x2="680" y2="70"  stroke="#30363d" stroke-width="1"/>
+
+  <!-- Y-axis labels -->
+  <text x="72" y="354" text-anchor="end" fill="#8b949e" font-size="10">0%</text>
+  <text x="72" y="298" text-anchor="end" fill="#8b949e" font-size="10">20%</text>
+  <text x="72" y="242" text-anchor="end" fill="#8b949e" font-size="10">40%</text>
+  <text x="72" y="186" text-anchor="end" fill="#8b949e" font-size="10">60%</text>
+  <text x="72" y="130" text-anchor="end" fill="#8b949e" font-size="10">80%</text>
+  <text x="72" y="74"  text-anchor="end" fill="#8b949e" font-size="10">100%</text>
+
+  <!-- Y-axis title -->
+  <text x="18" y="210" text-anchor="middle" fill="#8b949e" font-size="11" transform="rotate(-90, 18, 210)">Stump Accuracy (%)</text>
+
+  <!-- X-axis cap values: 20,40,60,80,120,200,350,500 -->
+  <!-- x positions: 80 + (i/(n-1))*600 for n=8 caps -->
+  <!-- i=0→x=80, i=1→x=166, i=2→x=252, i=3→x=337, i=4→x=424, i=5→x=508, i=6→x=594, i=7→x=680 -->
+  <!-- But let's use log-ish spacing to show the 20→40 cliff better -->
+  <!-- cap:  20   40   60   80   120  200  350  500 -->
+  <!-- xpos: 80  166  252  337  424  508  594  680 -->
+
+  <!-- Vertical grid lines at each cap -->
+  <line x1="80"  y1="70" x2="80"  y2="350" stroke="#30363d" stroke-width="0.5"/>
+  <line x1="166" y1="70" x2="166" y2="350" stroke="#30363d" stroke-width="0.5"/>
+  <line x1="252" y1="70" x2="252" y2="350" stroke="#30363d" stroke-width="0.5"/>
+  <line x1="337" y1="70" x2="337" y2="350" stroke="#30363d" stroke-width="0.5"/>
+  <line x1="424" y1="70" x2="424" y2="350" stroke="#30363d" stroke-width="0.5"/>
+  <line x1="508" y1="70" x2="508" y2="350" stroke="#30363d" stroke-width="0.5"/>
+  <line x1="594" y1="70" x2="594" y2="350" stroke="#30363d" stroke-width="0.5"/>
+  <line x1="680" y1="70" x2="680" y2="350" stroke="#30363d" stroke-width="0.5"/>
+
+  <!-- X-axis labels -->
+  <text x="80"  y="368" text-anchor="middle" fill="#8b949e" font-size="10">20</text>
+  <text x="166" y="368" text-anchor="middle" fill="#8b949e" font-size="10">40</text>
+  <text x="252" y="368" text-anchor="middle" fill="#8b949e" font-size="10">60</text>
+  <text x="337" y="368" text-anchor="middle" fill="#8b949e" font-size="10">80</text>
+  <text x="424" y="368" text-anchor="middle" fill="#8b949e" font-size="10">120</text>
+  <text x="508" y="368" text-anchor="middle" fill="#8b949e" font-size="10">200</text>
+  <text x="594" y="368" text-anchor="middle" fill="#8b949e" font-size="10">350</text>
+  <text x="680" y="368" text-anchor="middle" fill="#8b949e" font-size="10">500</text>
+  <text x="380" y="388" text-anchor="middle" fill="#8b949e" font-size="11">Field Cap (chars)</text>
+
+  <!-- Accuracy to y position: y = 350 - (acc/100)*280 -->
+  <!-- GPT-4o data: cap→acc: 20→22%, 40→61%, 60→81%, 80→88%, 120→88%, 200→83%, 350→79%, 500→79% -->
+  <!-- y: 20%→288, 61%→179, 81%→123, 88%→104, 88%→104, 83%→118, 79%→129, 79%→129 -->
+  <polyline
+    points="80,288 166,179 252,123 337,104 424,104 508,118 594,129 680,129"
+    fill="none" stroke="#58a6ff" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- GPT-4o dots -->
+  <circle cx="80"  cy="288" r="4" fill="#58a6ff"/>
+  <circle cx="166" cy="179" r="4" fill="#58a6ff"/>
+  <circle cx="252" cy="123" r="4" fill="#58a6ff"/>
+  <circle cx="337" cy="104" r="4" fill="#58a6ff"/>
+  <circle cx="424" cy="104" r="4" fill="#58a6ff"/>
+  <circle cx="508" cy="118" r="4" fill="#58a6ff"/>
+  <circle cx="594" cy="129" r="4" fill="#58a6ff"/>
+  <circle cx="680" cy="129" r="4" fill="#58a6ff"/>
+
+  <!-- Gemini Flash data: cap→acc: 20→35%, 40→72%, 60→78%, 80→80%, 120→80%, 200→80%, 350→80%, 500→80% -->
+  <!-- y: 35%→252, 72%→149, 78%→132, 80%→126, 80%→126, 80%→126, 80%→126, 80%→126 -->
+  <polyline
+    points="80,252 166,149 252,132 337,126 424,126 508,126 594,126 680,126"
+    fill="none" stroke="#3fb950" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="6,3"/>
+  <!-- Flash dots -->
+  <circle cx="80"  cy="252" r="4" fill="#3fb950"/>
+  <circle cx="166" cy="149" r="4" fill="#3fb950"/>
+  <circle cx="252" cy="132" r="4" fill="#3fb950"/>
+  <circle cx="337" cy="126" r="4" fill="#3fb950"/>
+  <circle cx="424" cy="126" r="4" fill="#3fb950"/>
+  <circle cx="508" cy="126" r="4" fill="#3fb950"/>
+  <circle cx="594" cy="126" r="4" fill="#3fb950"/>
+  <circle cx="680" cy="126" r="4" fill="#3fb950"/>
+
+  <!-- Mistral Large data: cap→acc: 20→28%, 40→55%, 60→68%, 80→72%, 120→75%, 200→74%, 350→73%, 500→72% -->
+  <!-- y: 28%→272, 55%→196, 68%→160, 72%→149, 75%→140, 74%→143, 73%→146, 72%→149 -->
+  <polyline
+    points="80,272 166,196 252,160 337,149 424,140 508,143 594,146 680,149"
+    fill="none" stroke="#d29922" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="2,3"/>
+  <!-- Mistral dots -->
+  <circle cx="80"  cy="272" r="4" fill="#d29922"/>
+  <circle cx="166" cy="196" r="4" fill="#d29922"/>
+  <circle cx="252" cy="160" r="4" fill="#d29922"/>
+  <circle cx="337" cy="149" r="4" fill="#d29922"/>
+  <circle cx="424" cy="140" r="4" fill="#d29922"/>
+  <circle cx="508" cy="143" r="4" fill="#d29922"/>
+  <circle cx="594" cy="146" r="4" fill="#d29922"/>
+  <circle cx="680" cy="149" r="4" fill="#d29922"/>
+
+  <!-- Annotation: cliff at 20→40 -->
+  <line x1="123" y1="170" x2="100" y2="230" stroke="#8b949e" stroke-width="1" marker-end="url(#arr)"/>
+  <text x="138" y="162" text-anchor="middle" fill="#8b949e" font-size="9">cliff</text>
+  <text x="138" y="173" text-anchor="middle" fill="#8b949e" font-size="9">(20→40)</text>
+
+  <!-- Annotation: GPT-4o regression at 200+ -->
+  <line x1="530" y1="108" x2="554" y2="125" stroke="#f85149" stroke-width="1"/>
+  <text x="520" y="103" text-anchor="middle" fill="#f85149" font-size="9">GPT-4o</text>
+  <text x="520" y="113" text-anchor="middle" fill="#f85149" font-size="9">regression</text>
+
+  <!-- Legend -->
+  <rect x="84" y="76" width="190" height="52" fill="#0d1117" rx="3" opacity="0.85"/>
+  <line x1="92" y1="90" x2="116" y2="90" stroke="#58a6ff" stroke-width="2.5"/>
+  <circle cx="104" cy="90" r="3" fill="#58a6ff"/>
+  <text x="122" y="94" fill="#e6edf3" font-size="10">GPT-4o (peaks cap=80–120)</text>
+  <line x1="92" y1="106" x2="116" y2="106" stroke="#3fb950" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <circle cx="104" cy="106" r="3" fill="#3fb950"/>
+  <text x="122" y="110" fill="#e6edf3" font-size="10">Gemini Flash (plateaus cap=40)</text>
+  <line x1="92" y1="122" x2="116" y2="122" stroke="#d29922" stroke-width="2.5" stroke-dasharray="2,3"/>
+  <circle cx="104" cy="122" r="3" fill="#d29922"/>
+  <text x="122" y="126" fill="#e6edf3" font-size="10">Mistral Large (peaks cap=120)</text>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#8b949e"/>
+    </marker>
+  </defs>
+</svg>

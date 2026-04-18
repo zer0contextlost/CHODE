@@ -1,0 +1,16 @@
+export const STANDARD_CODEC: Record<string, string> = {
+  auth: 'authentication',
+  db: 'database',
+  mw: 'middleware',
+  cfg: 'configuration',
+  util: 'utilities',
+  repo: 'repository',
+  doc: 'documentation',
+  pkg: 'packages',
+  mod: 'modules',
+  ctrl: 'controllers',
+  svc: 'services',
+  mdl: 'models',
+  hlp: 'helpers',
+  ws: 'websockets',
+};

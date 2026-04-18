@@ -1,0 +1,22 @@
+---CHODE v2 @ d6df533---
+
+---DNA---
+@STACK python
+@FRONTEND ts preact astro webpack vite (web/src/)
+@CI github-actions
+@PKG pnpm uv
+@TEST puppeteer
+@CONFIG toml
+@ROUTES zilencer/urls.py
+@DATA zilencer/models.py
+@AUTH ldap saml
+@PACKAGES zerver/(1655) web/(459) zilencer/(98) corporate/(92) analytics/(43)
+@STRUCT zerver/(3.0k) corporate/(1.9k) web/(1.5k) starlight_help/(504)…
+@MIDDLEWARE zerver/
+
+---CONTEXT---
+@PURPOSE Zulip is open-source organized team chat app with unique topic-based threading that combines best of email and chat to make remote work productive and delightful. Fortune 500 companies, leading open…
+@CONVENTIONS Zulip is team chat application used by thousands of organizations, built to last for many years. It is developed by vibrant open-source community, with maintainers who have consistently emphasized…
+@SETUP Contributing code. Check out our guide for new contributors to get started. We have invested in making Zulip’s code highly readable, thoughtfully tested, and easy to modify. Beyond that, we have…
+@TESTING Zulip server takes pride in its ~98% test coverage. All server changes must include nice tests that follow our testing philosophy. ### Before Submitting: ```bash ./tools/test-js-with-node #…
+@GOTCHAS ### Treating Known Issues as Acceptable common failure mode is discovering problem during verification and then noting it as known limitation than fixing it. At Zulip, there is no category of…
