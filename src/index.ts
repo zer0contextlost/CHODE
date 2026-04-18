@@ -358,6 +358,7 @@ async function main() {
   const force = args.includes('--force');
   const full = args.includes('--full');
   const doVerify = args.includes('--verify');
+  const doStdout = args.includes('--stdout');
   const targetArg = args.find(a => !a.startsWith('--')) ?? '.';
   const target = resolve(targetArg);
   const chodeFile = `${target}/.chode`;
@@ -420,6 +421,12 @@ async function main() {
   }
 
   const output = assemble({ dna, context: contextStr, tree, codex, gitHash });
+
+  if (doStdout) {
+    process.stdout.write(output + '\n');
+    return;
+  }
+
   await writeFile(chodeFile, output, 'utf8');
   await writeFile(hashFile, currentHash, 'utf8');
 
