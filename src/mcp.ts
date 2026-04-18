@@ -22,8 +22,33 @@ import {
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import { generateProfile } from './generate.ts';
-import { resolve } from 'node:path';
+import { resolve, sep } from 'node:path';
 import { stat } from 'node:fs/promises';
+
+// Fixes #4: block well-known sensitive system directories from being profiled.
+// Developers legitimately keep repos in many locations, so a blocklist of
+// dangerous root paths is safer than an over-restrictive allowlist.
+const SENSITIVE_PATH_PREFIXES: string[] = [
+  // Unix system directories
+  '/etc', '/proc', '/sys', '/dev', '/run', '/boot', '/sbin',
+  '/lib', '/lib64', '/usr/lib', '/usr/lib64',
+  // macOS system
+  '/private/etc', '/private/var',
+  // Windows system directories (case-insensitive check applied below)
+  'C:\\Windows', 'C:\\System32', 'C:\\Program Files', 'C:\\Program Files (x86)',
+  'C:\\ProgramData', 'C:\\Recovery',
+];
+
+function isSensitivePath(resolved: string): boolean {
+  const lower = resolved.toLowerCase();
+  for (const prefix of SENSITIVE_PATH_PREFIXES) {
+    const lp = prefix.toLowerCase();
+    if (lower === lp || lower.startsWith(lp + '/') || lower.startsWith(lp + sep)) {
+      return true;
+    }
+  }
+  return false;
+}
 
 const server = new Server(
   { name: 'chode', version: '2.0.0' },
@@ -64,6 +89,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     }
 
     const resolved = resolve(repoPath);
+
+    // Fixes #4: reject sensitive system paths before walking the filesystem
+    if (isSensitivePath(resolved)) {
+      return { content: [{ type: 'text', text: `Error: '${resolved}' is a restricted system path` }], isError: true };
+    }
 
     try {
       const s = await stat(resolved);
