@@ -700,18 +700,12 @@ CHODE is open source and available at github.com/zer0contextlost/CHODE. It runs 
 
 ## References
 
-[1] Anthropic. Claude technical report. 2024.
+[1] OpenAI. GPT-4 Technical Report. arXiv:2303.08774, 2023.
 
-[2] OpenAI. GPT-4 technical report. arXiv:2303.08774, 2023.
+[2] Jiang et al. "LLMLingua: Compressing Prompts for Accelerated Inference of Large Language Models." EMNLP 2023. arXiv:2310.05736.
 
-[3] Jiang et al. "On the Effectiveness of Context Compression for Repository-Level Tasks." arXiv, 2025.
+[3] Repomix. github.com/yamadashy/repomix. Accessed April 2026.
 
-[4] Pan et al. "LLMLingua: Compressing Prompts for Accelerated Inference of Large Language Models." EMNLP 2023.
+[4] Codebase Context Specification. github.com/Agentic-Insights/codebase-context-spec. Accessed April 2026.
 
-[5] Liu et al. "Lost in the Middle: How Language Models Use Long Contexts." TACL, 2024.
-
-[6] Repomix. github.com/yamadashy/repomix. Accessed April 2026.
-
-[7] Codebase Context Specification. github.com/Agentic-Insights/codebase-context-spec. Accessed April 2026.
-
-[8] aider RepoMap. aider.chat/docs/repomap.html. Accessed April 2026.
+[5] aider RepoMap. aider.chat/docs/repomap.html. Accessed April 2026.
