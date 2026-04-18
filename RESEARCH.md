@@ -685,7 +685,7 @@ The primary finding — that 43,000 tokens of raw documentation scores 4pp below
 
 Structured extraction at generation time avoids both failure modes by removing the retrieval problem entirely. When a model reads `@ROUTES chi → routers/ (447 files)`, it does not need to locate chi in 43,000 tokens of noise — the fact is in the label, at the right abstraction level, with no surrounding context to dilute it.
 
-CHODE is available as an npm package (`npm install -g chode`) and runs on any repository without network access or API keys.
+CHODE is open source and available at github.com/zer0contextlost/CHODE. It runs on any repository without network access or API keys.
 
 ---
 
