@@ -639,7 +639,7 @@ Next.js (27,000 files) required ~567 token profiles but raw self-profiling excee
 
 **Manual context standards.** The Codebase Context Specification defines a community standard for manually maintained `.context/index.md` files. CHODE automates this pattern — providing the same structured information without requiring manual authorship or maintenance.
 
-**Code structure tools.** aider's RepoMap produces a code-structure index (types, function signatures) at ~1,000 tokens. RepoMap targets code navigation — locating where to make a change in source. We benchmarked RepoMap against CHODE on orientation questions and found CHODE scoring 83% vs RepoMap's 7%, confirming these are different use cases: orientation (what is this project?) vs. navigation (where is this specific code?).
+**Code structure tools.** aider's RepoMap produces a code-structure index (types, function signatures) at ~1,000 tokens. RepoMap targets code navigation — locating where to make a change in source. These are complementary use cases: orientation (what is this project?) vs. navigation (where is this specific code?). CHODE and RepoMap solve different problems and are best used together.
 
 **Academic context.** "On the Effectiveness of Context Compression for Repository-Level Tasks" (2025) covers similar territory on the academic side. CHODE's empirical contribution is the structured extraction approach — the finding that field-targeted extraction at generation time outperforms compression or retrieval at inference time.
 
