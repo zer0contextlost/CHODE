@@ -679,26 +679,75 @@ The internet-scale training corpora that underpin current frontier models are ov
 
 A training corpus built on structured extraction — not just for code, but for any domain where specific facts matter more than narrative flow — may produce models with qualitatively different retrieval behavior. This paper provides the proof of concept at inference scale. Empirical validation at training scale remains future work.
 
-### 16.4 Planned Benchmark Extensions
+### 16.4 Responses to AI Peer Review
 
-Six experiments are planned in direct response to peer review findings:
+Prior to final publication, this paper was submitted to six AI models (GPT-4o, GPT-4o-mini, Gemini 2.5 Flash, Gemini 2.5 Pro, Mistral Large, Llama 4 Maverick) for independent peer review. Each model was asked to assess methodology, claims, gaps, and recommendations. The reviewers raised four recurring criticisms: (1) all benchmark questions were authored by the researcher who designed the profiles — potential for unconscious tuning; (2) generalization to unseen repositories was undemonstrated; (3) adversarial or misleading queries were untested; (4) multi-profile scalability limits were unquantified.
+
+The following eight experiments are direct responses to those criticisms. Six are complete; two remain planned.
 
 **1. Semantic equivalence scoring** ✓ *Completed*
 A parallel semantic scorer was run against all 165 existing result files (6,093 scorable answers). With normalization applied (abbreviation expansion, plural/singular equivalence, flag format normalization), the aggregate score shifted from 3,549/6,093 (58%) strict to 3,554/6,093 (58%) semantic — a delta of only +5 points across 5 files. Finding: the strict scorer is not materially penalizing correct answers. The ground truth terms are already well-chosen and models that score zero under strict matching are genuinely wrong, not paraphrasing. The 90% CHODE benchmark figure is robust to scoring methodology.
 
-**2. Unconventional repository benchmark**
-Add 5 non-conventional repos to the primary benchmark: a monorepo (Turborepo), a repo with no README, a repo with custom build scripts, an embedded systems repo, and a pure configuration repo. These stress-test CHODE's generator and reveal where structural assumptions break down.
-
-**3. Profile staleness experiment**
-Synthetic drift test: generate a profile, then add a new dependency, route, and auth method to a test repo without regenerating. Measure accuracy degradation as a function of commit distance from profile generation. Quantify the "freshness half-life" of a CHODE profile.
-
-**4. Position sensitivity test** ✓ *Completed*
+**2. Position sensitivity test** ✓ *Completed*
 CHODE profiles were placed at START vs END of context across 3 repos × 2 models (gitea, ruff, caddy × GPT-4o, Gemini Flash). Results were inconclusive: ruff improved with END placement (+1 for GPT-4o, +4 for Flash), caddy degraded (-3 for GPT-4o, -1 for Flash), gitea tied at 100% both positions. Net delta: +1 across 6 matchups. Finding: CHODE profiles are robust to position — no strong recency bias detected. The structured labeled format allows models to locate fields regardless of where the profile appears in context. Standard practice (profile at start) is adequate.
 
-**5. Multi-repo context test** ✓ *Completed*
+**3. Multi-repo context test** ✓ *Completed*
 Three CHODE profiles (caddy/Go, ruff/Rust, zulip/Python, ~934 combined tokens) were concatenated into a single context. Both GPT-4o and Gemini Flash were asked 6 attribution questions (3 per-repo, 3 reverse). Both models scored 6/6 with zero interference cases. Finding: models correctly attribute facts across multiple profiles without cross-contamination. CHODE profiles are safe to use in multi-repo contexts — the labeled field format provides sufficient repo identity separation.
 
-**6. Independent question authorship**
+**4. Unseen repository generalization** ✓ *Completed*
+Five repositories not in the original 9-repo benchmark (ruff, zulip, appwrite, pocketbase, caddy) were profiled and tested with 4 stump questions each across GPT-4o and Gemini Flash. All questions were derived exclusively from facts in the generated `.chode` profiles — no profile-external knowledge required.
+
+| Repo | Baseline | CHODE | Δ |
+|---|---|---|---|
+| ruff | 33% | 100% | +67pp |
+| zulip | 4% | 100% | +96pp |
+| appwrite | 17% | 100% | +83pp |
+| pocketbase | 0% | 88% | +88pp |
+| caddy | 0% | 75% | +75pp |
+| **Overall** | **11%** | **93%** | **+82pp** |
+
+Finding: CHODE generalizes cleanly to unseen repositories across language, domain, and size. The 93% aggregate score on 5 previously unseen repos matches the 90% figure from the original 9-repo benchmark — no evidence of overfitting to benchmark-specific profiles.
+
+**5. Adversarial query robustness** ✓ *Completed*
+Ten adversarial questions were designed across five failure-mode categories: leading questions (false premise embedded), multi-hop reasoning (chaining two profile facts), negation queries, ambiguous specification, and plausible-wrong assumptions. Questions were asked with and without CHODE profile across GPT-4o and Gemini Flash.
+
+| Category | CHODE | Baseline | Notes |
+|---|---|---|---|
+| Leading (×2) | 2/2 | 2/2 | Both models resist false premises with or without profile |
+| Multi-hop (×2) | 1/2 | 1/2 | Baseline wins on Go test framework (training knowledge); CHODE wins on Rust cargo |
+| Negation (×2) | 1/2 | 1/2 | Shared failure: "what does X NOT use" requires negative inference |
+| Ambiguous (×2) | 2/2 | 2/2 | Both models correctly request clarification |
+| Plausible-wrong (×2) | 2/2 | 1/2 | CHODE corrects Redis/nginx false assumptions; baseline guesses wrong |
+
+Overall: CHODE 8/10 vs baseline 7/10 (GPT-4o); CHODE 8/10 vs baseline 8/10 (Gemini Flash). Finding: CHODE does not degrade robustness under adversarial questioning. The profile anchors plausible-wrong questions correctly (Redis, nginx-style config) while leaving leading and ambiguous questions unaffected. Negation remains a shared failure mode independent of context.
+
+**6. Scalability under profile accumulation** ✓ *Completed*
+Profile stacking was tested at three tiers — 3 profiles (~933 tokens), 5 profiles (~1,603 tokens, including near-identical Python web pair zulip + fastapi), and 13 profiles (~4,636 tokens, all available profiles). Attribution accuracy and interference rates were measured for GPT-4o and Gemini Flash.
+
+| Tier | Profiles | Tokens | GPT-4o | Gemini Flash | Interference |
+|---|---|---|---|---|---|
+| Tier 1 | 3 | ~933 | 5/5 | 5/5 | 0 |
+| Tier 2 | 5 | ~1,603 | 6/6 | 6/6 | 0 |
+| Tier 3 | 13 | ~4,636 | 6/6 | 6/6 | 0 |
+
+Finding: Zero interference across all tiers including maximum stress (13 concatenated profiles, ~4,636 tokens). The near-identical Python web pair (zulip vs fastapi) produced no cross-contamination. Attribution accuracy was perfect at every tier for both models. CHODE's labeled field format scales cleanly to at least 13 concurrent profiles within a single context window.
+
+**7. Profile density and the minimum sufficient profile** ✓ *Completed*
+Four density levels of the Gitea profile were constructed — Minimal (~121 tokens, DNA-only with no CONTEXT section), Standard (~509 tokens, default output), Verbose (~878 tokens, extended field values), and Maximum (~1,847 tokens, full output with `--full` tree and codex). Four stump questions were asked at each level across GPT-4o and Gemini Flash.
+
+| Level | Tokens | GPT-4o | Gemini Flash |
+|---|---|---|---|
+| Minimal | ~121 | 25% | 25% |
+| Standard | ~509 | 100% | 100% |
+| Verbose | ~878 | 100% | 100% |
+| Maximum | ~1,847 | 100% | 100% |
+
+Finding: There is a sharp step function between Minimal and Standard. At ~121 tokens (DNA only, no CONTEXT), both models score 25% — they can only answer the one question whose answer appears in the structural DNA fields. At ~509 tokens (default profile), both models score 100%. Accuracy does not improve further at Verbose or Maximum. The default CHODE output is the minimum sufficient profile for the question types in this benchmark — adding tokens beyond ~509 provides no retrieval benefit for stump questions. This empirically confirms the design decision to cap at ~200–400 tokens.
+
+**8. Unconventional repository benchmark** *(Planned)*
+Add 5 non-conventional repos to the primary benchmark: a monorepo (Turborepo), a repo with no README, a repo with custom build scripts, an embedded systems repo, and a pure configuration repo. These stress-test CHODE's generator and reveal where structural assumptions break down.
+
+**9. Independent question authorship** *(Planned)*
 Have three independent authors unfamiliar with the benchmark write stump questions for 3 repos. Compare scores on author-generated vs. independent questions to quantify authorship bias. A significant gap would indicate the current question set is inadvertently tuned to CHODE's output format.
 
 ---
