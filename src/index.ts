@@ -115,10 +115,12 @@ async function main() {
   const chodeFile = `${target}/.chode`;
   const hashFile = `${target}/.chode.hash`;
 
-  const isGitHubUrl = /^https?:\/\/github\.com\/[^/]+\/[^/]+/.test(targetArg);
+  // Fixes #3: anchored end, HTTPS-only, exactly two path segments, no query/fragment/extra paths
+  const normalizedArg = targetArg.replace(/\.git$/, '');
+  const isGitHubUrl = /^https:\/\/github\.com\/[^/?#]+\/[^/?#]+$/.test(normalizedArg);
   let tmpDir: string | undefined;
   if (isGitHubUrl) {
-    const repoUrl = targetArg.replace(/\.git$/, '') + '.git';
+    const repoUrl = normalizedArg + '.git';
     tmpDir = await mkdtemp(join(tmpdir(), 'chode-'));
     console.log(`  cloning ${repoUrl}...\n`);
     const clone = spawnSync('git', ['clone', '--depth=1', repoUrl, tmpDir], { stdio: 'inherit' });
