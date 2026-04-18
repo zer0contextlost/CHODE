@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-import { resolve, basename } from 'node:path';
-import { writeFile, readFile, stat } from 'node:fs/promises';
+import { resolve, basename, join } from 'node:path';
+import { writeFile, readFile, stat, mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { walk } from './crawler/walker.ts';
@@ -364,29 +365,54 @@ async function main() {
   const chodeFile = `${target}/.chode`;
   const hashFile = `${target}/.chode.hash`;
 
+  // GitHub URL support — clone to temp dir, profile, clean up
+  const isGitHubUrl = /^https?:\/\/github\.com\/[^/]+\/[^/]+/.test(targetArg);
+  let tmpDir: string | undefined;
+  if (isGitHubUrl) {
+    const repoUrl = targetArg.replace(/\.git$/, '') + '.git';
+    tmpDir = await mkdtemp(join(tmpdir(), 'chode-'));
+    console.log(`  cloning ${repoUrl}...\n`);
+    const clone = spawnSync('git', ['clone', '--depth=1', repoUrl, tmpDir], { stdio: 'inherit' });
+    if (clone.status !== 0) {
+      await rm(tmpDir, { recursive: true, force: true });
+      console.error('  error: git clone failed');
+      process.exit(1);
+    }
+    // Re-resolve target to the cloned dir
+    const args2 = process.argv.slice(2).map(a => a === targetArg ? tmpDir! : a);
+    process.argv = [...process.argv.slice(0, 2), ...args2];
+  }
+
+  const resolvedTarget = tmpDir ?? target;
+  const resolvedChodeFile = doStdout ? chodeFile : `${resolvedTarget}/.chode`;
+  const resolvedHashFile = `${resolvedTarget}/.chode.hash`;
+
   if (doVerify) {
-    await runVerify(target, chodeFile);
+    await runVerify(resolvedTarget, resolvedChodeFile);
+    if (tmpDir) await rm(tmpDir, { recursive: true, force: true });
     return;
   }
 
-  try {
-    const s = await stat(target);
-    if (!s.isDirectory()) throw new Error('not a directory');
-  } catch {
-    console.error(`  error: '${target}' is not a directory`);
-    process.exit(1);
+  if (!isGitHubUrl) {
+    try {
+      const s = await stat(target);
+      if (!s.isDirectory()) throw new Error('not a directory');
+    } catch {
+      console.error(`  error: '${target}' is not a directory`);
+      process.exit(1);
+    }
   }
 
   const start = performance.now();
-  console.log(`chode sequencing ${target}\n`);
+  console.log(`chode sequencing ${resolvedTarget}\n`);
 
-  const { files } = await walk(target);
+  const { files } = await walk(resolvedTarget);
 
   // Hash check — skip regeneration if file list unchanged and not forced
   const currentHash = computeHash(files);
-  if (!force) {
+  if (!force && !isGitHubUrl) {
     try {
-      const savedHash = await readFile(hashFile, 'utf8');
+      const savedHash = await readFile(resolvedHashFile, 'utf8');
       if (savedHash.trim() === currentHash) {
         console.log(`  up to date (${files.length} files, hash match)`);
         return;
@@ -397,8 +423,8 @@ async function main() {
   const { zones, anchors } = detect(files);
 
   const [context, dnaFragments] = await Promise.all([
-    ingestContext('context', target, files),
-    extractDna(anchors, zones, files, target),
+    ingestContext('context', resolvedTarget, files),
+    extractDna(anchors, zones, files, resolvedTarget),
   ]);
 
   const dna = buildDna(dnaFragments);
@@ -406,7 +432,7 @@ async function main() {
 
   const gitHash = (() => {
     try {
-      const r = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { cwd: target, encoding: 'utf8' });
+      const r = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { cwd: resolvedTarget, encoding: 'utf8' });
       return r.stdout?.trim() || undefined;
     } catch { return undefined; }
   })();
@@ -414,9 +440,9 @@ async function main() {
   let tree: string | undefined;
   let codex: string | undefined;
   if (full) {
-    const codexCandidates = buildCustomCodexCandidates(files, target);
+    const codexCandidates = buildCustomCodexCandidates(files, resolvedTarget);
     const codexMap = buildCodexMap(codexCandidates);
-    tree = buildTree(target, files, codexMap);
+    tree = buildTree(resolvedTarget, files, codexMap);
     codex = buildCodex(codexCandidates);
   }
 
@@ -424,19 +450,20 @@ async function main() {
 
   if (doStdout) {
     process.stdout.write(output + '\n');
+    if (tmpDir) await rm(tmpDir, { recursive: true, force: true });
     return;
   }
 
-  await writeFile(chodeFile, output, 'utf8');
-  await writeFile(hashFile, currentHash, 'utf8');
+  await writeFile(resolvedChodeFile, output, 'utf8');
+  if (!isGitHubUrl) await writeFile(resolvedHashFile, currentHash, 'utf8');
 
   const elapsed = ((performance.now() - start) / 1000).toFixed(1);
   printSummary(zones, files.length, context, elapsed, output);
 
-  if (doCommit) {
-    const add = spawnSync('git', ['add', '.chode'], { cwd: target, stdio: 'inherit' });
+  if (doCommit && !isGitHubUrl) {
+    const add = spawnSync('git', ['add', '.chode'], { cwd: resolvedTarget, stdio: 'inherit' });
     if (add.status === 0) {
-      const commit = spawnSync('git', ['commit', '-m', 'chore: update .chode'], { cwd: target, stdio: 'inherit' });
+      const commit = spawnSync('git', ['commit', '-m', 'chore: update .chode'], { cwd: resolvedTarget, stdio: 'inherit' });
       if (commit.status !== 0) {
         console.log('  nothing to commit (.chode unchanged)');
       }
@@ -444,6 +471,8 @@ async function main() {
       console.error('  git add failed — is this a git repository?');
     }
   }
+
+  if (tmpDir) await rm(tmpDir, { recursive: true, force: true });
 }
 
 function computeHash(files: string[]): string {
