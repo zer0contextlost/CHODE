@@ -1,6 +1,6 @@
 import type { DnaFragment } from '../types.ts';
 
-const SECTION_ORDER = ['@STACK', '@FRONTEND', '@CI', '@PKG', '@TEST', '@CONFIG', '@ENTRY', '@ROUTES', '@DATA', '@ENTITIES', '@AUTH', '@API', '@ARCH', '@PACKAGES', '@STRUCT', '@PATTERNS', '@MIDDLEWARE', '@MUT'];
+const SECTION_ORDER = ['@STACK', '@FRONTEND', '@CI', '@PKG', '@TEST', '@CONFIG', '@ENTRY', '@ROUTES', '@DATA', '@ENTITIES', '@AUTH', '@API', '@ARCH', '@PACKAGES', '@STRUCT', '@PATTERNS', '@MIDDLEWARE'];
 
 // @STRUCT bracket-expansion adds noise beyond ~120 chars (confirmed in cap ablation: GPT-4o
 // peaks at cap=80-120, then drops at cap=200+ specifically due to @STRUCT expansion).

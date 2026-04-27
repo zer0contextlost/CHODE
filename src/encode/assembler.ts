@@ -12,7 +12,7 @@ export function assemble(sections: AssembleInput): string {
   const parts = [header, ''];
 
   if (sections.tree) {
-    parts.push('---TREE---', sections.tree, '', '---LEGEND---', sections.codex ?? '', '');
+    parts.push('---TREE---', sections.tree, '', '---CODEX---', sections.codex ?? '', '');
   }
 
   parts.push('---DNA---', sections.dna, '', '---CONTEXT---', sections.context, '');

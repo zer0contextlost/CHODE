@@ -71,12 +71,7 @@ export function detect(files: string[]): DetectResult {
 
   const zones: Zone[] = [];
   for (const [kind, paths] of byKind) {
-    zones.push({
-      id: `zone-${kind}`,
-      kind,
-      root: '',
-      files: paths,
-    });
+    zones.push({ kind, files: paths });
   }
   zones.sort((a, b) => b.files.length - a.files.length);
 

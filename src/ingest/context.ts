@@ -6,9 +6,9 @@ type Field = keyof NonNullable<ContextResult['compressed']>;
 
 const FIELD_MAP: Array<[string[], Field]> = [
   [['__intro__', 'purpose', 'overview', 'about', 'what is', 'description'], 'purpose'],
-  [['setup', 'installation', 'install', 'getting started', 'quickstart', 'running', 'run '], 'setup'],
+  [['setup', 'installation', 'install', 'getting started', 'quickstart', 'running', 'run ', 'configuration'], 'setup'],
   [['conventions', 'style', 'code style', 'guidelines', 'philosophy'], 'conventions'],
-  [['environment variables', 'env vars', 'environment', 'env', 'variables', 'configuration'], 'env'],
+  [['environment variables', 'env vars', 'environment', 'env', 'variables'], 'env'],
   [['testing', 'tests'], 'testing'],
   [['deploy', 'deployment', 'shipping'], 'deploy'],
   [['gotchas', 'caveats', 'known issues', 'warnings', 'notes', 'pitfalls'], 'gotchas'],
@@ -39,8 +39,9 @@ const MAX_FIELD_CHARS = 200;
 
 function isDocFile(path: string, root: string): boolean {
   if (!/\.(md|mdx|rst)$/i.test(path)) return false;
-  const rel = (sep === '\\' ? path.replace(/\\/g, '/') : path)
-    .replace(root.replace(/\\/g, '/').replace(/\/?$/, '/'), '');
+  const posixPath = sep === '\\' ? path.replace(/\\/g, '/') : path;
+  const posixRoot = (sep === '\\' ? root.replace(/\\/g, '/') : root).replace(/\/?$/, '/');
+  const rel = posixPath.startsWith(posixRoot) ? posixPath.slice(posixRoot.length) : posixPath;
   const parts = rel.split('/').filter(Boolean);
   const name = (parts[parts.length - 1] ?? '').toLowerCase();
   // Skip dirs checked first — examples/README.md is noise even if named readme
@@ -101,8 +102,9 @@ export async function ingestContext(
       const isRst = /\.rst$/i.test(path);
       const sections = extractSections(text, isRst);
       const fname = basename(path).toLowerCase();
-      const rel = (sep === '\\' ? path.replace(/\\/g, '/') : path)
-        .replace(root.replace(/\\/g, '/').replace(/\/?$/, '/'), '');
+      const posixPath2 = sep === '\\' ? path.replace(/\\/g, '/') : path;
+      const posixRoot2 = (sep === '\\' ? root.replace(/\\/g, '/') : root).replace(/\/?$/, '/');
+      const rel = posixPath2.startsWith(posixRoot2) ? posixPath2.slice(posixRoot2.length) : posixPath2;
       const depth = rel.split('/').filter(Boolean).length;
       // Non-root READMEs describe their subdirectory, not the project
       const nonRootReadme = /^readme\.(md|mdx)$/.test(fname) && depth > 1;
@@ -227,6 +229,8 @@ export function cavemanCompress(text: string): string {
   t = t.replace(/```[\s\S]*?```/g, protect);
   t = t.replace(/`[^`\n]+`/g, protect);
   // Strip markdown/HTML noise before compression
+  t = t.replace(/^>.*$/gm, '');                            // drop blockquote lines (epigraphs, callouts)
+  t = t.replace(/^-{3,}\s*$/gm, '');                      // drop horizontal rules
   t = t.replace(/<[^>]+>/g, ' ');                        // HTML tags
   t = t.replace(/!\[[^\]]*\]\[[^\]]*\]/g, '');           // ![alt][ref] reference images
   t = t.replace(/!\[[^\]]*\]\([^\)]*\)/g, '');           // ![alt](url) inline images

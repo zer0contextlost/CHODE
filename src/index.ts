@@ -14,8 +14,10 @@ import { generateProfile, extractDna, formatContext, buildCustomCodexCandidates 
 import { buildCodex, buildCodexMap } from './encode/codex.ts';
 import { buildTree } from './encode/tree.ts';
 
-function computeHash(files: string[]): string {
-  return createHash('sha1').update(files.join('\n')).digest('hex');
+async function computeHash(files: string[]): Promise<string> {
+  const mtimes = await Promise.all(files.map(f => stat(f).then(s => s.mtimeMs).catch(() => 0)));
+  const input = files.map((f, i) => `${f}:${mtimes[i]}`).join('\n');
+  return createHash('sha1').update(input).digest('hex');
 }
 
 function parseChodeFields(text: string): Map<string, string> {
@@ -38,7 +40,7 @@ async function runVerify(target: string, chodeFile: string): Promise<void> {
     process.exit(1);
   }
 
-  const { files } = await walk(target);
+  const { files, warnings: walkWarnings } = await walk(target);
   const { zones, anchors } = detect(files);
   const [context, dnaFragments] = await Promise.all([
     ingestContext('context', target, files),
@@ -92,7 +94,7 @@ async function runVerify(target: string, chodeFile: string): Promise<void> {
   process.exit(1);
 }
 
-function printSummary(zones: Zone[], fileCount: number, context: ContextResult, elapsed: string, output: string): void {
+function printSummary(zones: Zone[], fileCount: number, context: ContextResult, elapsed: string, output: string, walkWarnings: string[] = []): void {
   for (const zone of zones) console.log(`  [${zone.kind}] ${zone.files.length} files`);
   if (context.sources.length > 0) {
     const names = context.sources.map(s => basename(s)).join(', ');
@@ -100,16 +102,39 @@ function printSummary(zones: Zone[], fileCount: number, context: ContextResult, 
   }
   const tokenEstimate = Math.ceil(output.length / 4);
   console.log(`\n  ${fileCount} files | ${zones.length} zones | .chode written (~${tokenEstimate} tokens) | ${elapsed}s`);
-  for (const w of context.warnings) console.log(`  warn: ${w}`);
+  for (const w of [...walkWarnings, ...context.warnings]) console.log(`  warn: ${w}`);
 }
 
 async function main() {
   const args = process.argv.slice(2);
+
+  if (args.includes('--version') || args.includes('-v')) {
+    console.log('chode 0.0.1');
+    process.exit(0);
+  }
+  if (args.includes('--help') || args.includes('-h')) {
+    console.log(`Usage: chode [options] [target]
+
+  target    path to a directory or GitHub URL (default: .)
+
+Options:
+  --full      include tree and codex sections
+  --force     skip cache check and regenerate
+  --stdout    write to stdout instead of file
+  --json      write structured JSON to stdout instead of file
+  --verify    check .chode for drift without updating
+  --commit    git commit the .chode file after writing
+  --version   print version
+  --help      print this help`);
+    process.exit(0);
+  }
+
   const doCommit = args.includes('--commit');
   const force = args.includes('--force');
   const full = args.includes('--full');
   const doVerify = args.includes('--verify');
   const doStdout = args.includes('--stdout');
+  const doJson = args.includes('--json');
   const targetArg = args.find(a => !a.startsWith('--')) ?? '.';
   const target = resolve(targetArg);
   const chodeFile = `${target}/.chode`;
@@ -134,7 +159,7 @@ async function main() {
   }
 
   const resolvedTarget = tmpDir ?? target;
-  const resolvedChodeFile = doStdout ? chodeFile : `${resolvedTarget}/.chode`;
+  const resolvedChodeFile = `${resolvedTarget}/.chode`;
   const resolvedHashFile = `${resolvedTarget}/.chode.hash`;
 
   if (doVerify) {
@@ -156,9 +181,9 @@ async function main() {
   const start = performance.now();
   console.log(`chode sequencing ${resolvedTarget}\n`);
 
-  const { files } = await walk(resolvedTarget);
+  const { files, warnings: walkWarnings } = await walk(resolvedTarget);
 
-  const currentHash = computeHash(files);
+  const currentHash = await computeHash(files);
   if (!force && !isGitHubUrl) {
     try {
       const savedHash = await readFile(resolvedHashFile, 'utf8');
@@ -196,6 +221,19 @@ async function main() {
 
   const output = assemble({ dna, context: contextStr, tree, codex, gitHash });
 
+  if (doJson) {
+    const dnaRecord: Record<string, string> = {};
+    for (const f of dnaFragments) {
+      dnaRecord[f.section] = dnaRecord[f.section] ? `${dnaRecord[f.section]} | ${f.line}` : f.line;
+    }
+    const flatContext = Object.fromEntries(
+      Object.entries(context.compressed ?? {}).map(([k, v]) => [k, (v ?? '').replace(/\s+/g, ' ').trim()])
+    );
+    process.stdout.write(JSON.stringify({ version: tree ? 'v1' : 'v2', gitHash, dna: dnaRecord, context: flatContext }, null, 2) + '\n');
+    if (tmpDir) await rm(tmpDir, { recursive: true, force: true });
+    return;
+  }
+
   if (doStdout) {
     process.stdout.write(output + '\n');
     if (tmpDir) await rm(tmpDir, { recursive: true, force: true });
@@ -206,16 +244,11 @@ async function main() {
   if (!isGitHubUrl) await writeFile(resolvedHashFile, currentHash, 'utf8');
 
   const elapsed = ((performance.now() - start) / 1000).toFixed(1);
-  printSummary(zones, files.length, context, elapsed, output);
+  printSummary(zones, files.length, context, elapsed, output, walkWarnings);
 
   if (doCommit && !isGitHubUrl) {
-    const add = spawnSync('git', ['add', '.chode'], { cwd: resolvedTarget, stdio: 'inherit' });
-    if (add.status === 0) {
-      const commit = spawnSync('git', ['commit', '-m', 'chore: update .chode'], { cwd: resolvedTarget, stdio: 'inherit' });
-      if (commit.status !== 0) console.log('  nothing to commit (.chode unchanged)');
-    } else {
-      console.error('  git add failed — is this a git repository?');
-    }
+    const commit = spawnSync('git', ['commit', '-o', '-m', 'chore: update .chode', '--', '.chode'], { cwd: resolvedTarget, stdio: 'inherit' });
+    if (commit.status !== 0) console.log('  nothing to commit (.chode unchanged)');
   }
 
   if (tmpDir) await rm(tmpDir, { recursive: true, force: true });

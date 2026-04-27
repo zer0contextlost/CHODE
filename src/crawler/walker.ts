@@ -1,4 +1,4 @@
-import { readdir, readFile, realpath } from 'node:fs/promises';
+import { readdir, readFile, realpath, stat } from 'node:fs/promises';
 import { join, relative, sep } from 'node:path';
 
 const DEFAULT_IGNORE = new Set([
@@ -16,10 +16,11 @@ const MAX_DEPTH = 50;
 export type WalkResult = {
   files: string[];
   dirs: string[];
+  warnings: string[];
 };
 
 export async function walk(root: string): Promise<WalkResult> {
-  const ignoreGlobs = await loadIgnoreFiles(root);
+  const { globs: ignoreGlobs, warnings } = await loadIgnoreFiles(root);
   const files: string[] = [];
   const dirs: string[] = [];
   // Fixes #1: resolve root to its real path so symlink boundary checks are consistent
@@ -27,7 +28,7 @@ export async function walk(root: string): Promise<WalkResult> {
   await walkDir(realRoot, realRoot, files, dirs, ignoreGlobs, 0);
   files.sort();
   dirs.sort();
-  return { files, dirs };
+  return { files, dirs, warnings };
 }
 
 async function walkDir(
@@ -65,8 +66,13 @@ async function walkDir(
         const real = await realpath(full);
         const rootWithSep = root.endsWith(sep) ? root : root + sep;
         if (real !== root && !real.startsWith(rootWithSep)) continue;
-        // Symlink points within the root — treat as file (not recursed as dir)
-        files.push(full);
+        const targetStat = await stat(real);
+        if (targetStat.isDirectory()) {
+          dirs.push(full);
+          subTasks.push(walkDir(root, real, files, dirs, ignoreGlobs, depth + 1));
+        } else {
+          files.push(full);
+        }
       } catch {
         // Broken symlink — skip silently
       }
@@ -92,8 +98,9 @@ function matchesAny(rel: string, isDir: boolean, globs: RegExp[]): boolean {
   return false;
 }
 
-async function loadIgnoreFiles(root: string): Promise<RegExp[]> {
+async function loadIgnoreFiles(root: string): Promise<{ globs: RegExp[]; warnings: string[] }> {
   const globs: RegExp[] = [];
+  const warnings: string[] = [];
   for (const name of ['.gitignore', '.chodeignore']) {
     let text: string;
     try {
@@ -103,16 +110,20 @@ async function loadIgnoreFiles(root: string): Promise<RegExp[]> {
     }
     for (const raw of text.split(/\r?\n/)) {
       const line = raw.trim();
-      if (!line || line.startsWith('#') || line.startsWith('!')) continue;
+      if (!line || line.startsWith('#')) continue;
+      if (line.startsWith('!')) {
+        warnings.push(`${name}: negation pattern '${line}' not supported — pattern ignored`);
+        continue;
+      }
       for (const pattern of normalizePatterns(line)) {
         globs.push(globToRegex(pattern));
       }
     }
   }
-  return globs;
+  return { globs, warnings };
 }
 
-function globToRegex(pattern: string): RegExp {
+export function globToRegex(pattern: string): RegExp {
   let out = '';
   let i = 0;
   while (i < pattern.length) {

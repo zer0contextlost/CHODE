@@ -4,15 +4,18 @@
   "description": "Compressed Hierarchical Output for Developer Efficiency",
   "type": "module",
   "bin": {
-    "chode": "./src/index.ts",
+    "chode": "./bin/chode.js",
     "chode-mcp": "./src/mcp.ts"
   },
   "scripts": {
     "dev": "bun run src/index.ts",
     "build": "bun build --compile src/index.ts --outfile chode",
     "test": "node --experimental-strip-types benchmarks/regression.ts",
+    "test:unit": "node --experimental-strip-types --test tests/unit.test.ts",
     "test:update": "node --experimental-strip-types benchmarks/regression.ts --update",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:sai": "node --experimental-strip-types benchmarks/sai-test.ts --provider ollama",
+    "test:sai:openrouter": "node --experimental-strip-types benchmarks/sai-test.ts --provider openrouter"
   },
   "devDependencies": {
     "@types/bun": "latest",

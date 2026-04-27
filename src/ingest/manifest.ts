@@ -133,10 +133,10 @@ export async function parsePyProject(path: string): Promise<PyProject> {
   const text = await readFile(path, 'utf8');
   const nameMatch = text.match(/\[project\][\s\S]*?name\s*=\s*"([^"]+)"/);
   const deps: string[] = [];
-  const depsBlock = text.match(/dependencies\s*=\s*\[([\s\S]*?)\]/);
+  const depsBlock = text.match(/dependencies\s*=\s*\[([\s\S]*?)\n\s*\]/);
   if (depsBlock && depsBlock[1]) {
     for (const m of depsBlock[1].matchAll(/"([^"]+)"/g)) {
-      const dep = m[1]?.split(/[<>=!~\[]/)[0]?.trim();
+      const dep = m[1]?.replace(/\[.*?\]/g, '').split(/[<>=!~]/)[0]?.trim();
       if (dep) deps.push(dep);
     }
   }

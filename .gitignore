@@ -79,4 +79,7 @@ CHODE-SPEC.md
 ROADMAP.md
 blog-post.html
 whitepaper.html
+whitepaper-sai.html
 *.aidermap
+axum-full/
+gin-full/
